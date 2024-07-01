@@ -1,4 +1,5 @@
 import { cookies } from "next/headers";
+import { toHex } from "thirdweb";
 import { thirdwebAuth } from "../consts/thirdwebAuth";
 import { hasAccess } from "../actions/gate-condition";
 import { GatedContent } from "./GatedContent";
@@ -34,7 +35,7 @@ export default async function GatedPage() {
 
   // This is the part that we do the gating condition.
   // If pass -> Allow them to access the page.
-  const _hasAccess = await hasAccess(address);
+  const _hasAccess = await hasAccess(toHex(address));
   if (!_hasAccess) return <NotAllowed />;
   // Finally! We can load the gated content for them now
   return <GatedContent />;

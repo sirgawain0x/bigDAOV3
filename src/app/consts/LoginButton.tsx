@@ -8,7 +8,7 @@ import { generatePayload, isLoggedIn, login, logout } from "../actions/auth";
 export const LoginButton = () => {
   return (
     <ConnectButton
-      autoConnect={false}
+      autoConnect={true}
       client={client}
       chain={base}
       auth={{
