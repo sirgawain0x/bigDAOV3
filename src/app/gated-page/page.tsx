@@ -2,6 +2,8 @@ import { cookies } from "next/headers";
 import { thirdwebAuth } from "../consts/thirdwebAuth";
 import { hasAccess } from "../actions/gate-condition";
 import { GatedContent } from "./GatedContent";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 /**
  * This page is gated and should only allow access for wallets have logged in and pass the "gate condition"
@@ -34,7 +36,6 @@ export default async function GatedPage() {
   // If pass -> Allow them to access the page.
   const _hasAccess = await hasAccess(address);
   if (!_hasAccess) return <NotAllowed />;
-
   // Finally! We can load the gated content for them now
   return <GatedContent />;
 }
@@ -42,16 +43,23 @@ export default async function GatedPage() {
 const MustLogin = () => (
   <div className="text-center">
     You are not logged in. <br />
-    <a href="/" className="underline">
-      Log in now
-    </a>
+    <Button className="my-4" asChild>
+      <Link href={"/"}>Log In Now</Link>
+    </Button>
   </div>
 );
 
-const reason = "you do not own any NFT"; // replace this with your own reason
+const reason = "you do not own any Tickets"; // replace this with your own reason
 
 const NotAllowed = () => (
   <div className="text-center">
-    You are logged in but you do not have access to this page because {reason}
+    You are logged in but you do not have access to this page because {reason}.
+    <br />
+    <Button className="my-4 mx-2" asChild>
+      <Link href={"/tickets-page"}>Buy A Ticket</Link>
+    </Button>
+    <Button className="my-4 mx-2" asChild>
+      <Link href={"/"}>Return Home</Link>
+    </Button>
   </div>
 );
