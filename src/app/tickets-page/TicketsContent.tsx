@@ -1,7 +1,6 @@
 "use client";
-import React, { useState, useEffect } from "react";
-import { useActiveAccount, useReadContract } from "thirdweb/react";
-import { type NFT, getContract } from "thirdweb";
+import { useReadContract } from "thirdweb/react";
+import { getContract } from "thirdweb";
 import { client } from "../consts/client";
 import { base } from "thirdweb/chains";
 import { getNFT } from "thirdweb/extensions/erc721";
