@@ -1,10 +1,10 @@
-import { getContract } from "thirdweb";
+import { getContract, Address } from "thirdweb";
 import { avalancheFuji } from "thirdweb/chains";
 import { client } from "../consts/client";
 import { balanceOf as balanceOfERC721 } from "thirdweb/extensions/erc721";
 import { balanceOf as balanceOfERC20 } from "thirdweb/extensions/erc20";
 
-export async function hasAccess(address: string): Promise<boolean> {
+export async function hasAccess(address: Address): Promise<boolean> {
   return await example_hasSomeErc721Tokens(address);
   // return await example_hasSomeErc20Tokens(address);
 }
@@ -29,7 +29,7 @@ export async function hasAccess(address: string): Promise<boolean> {
  * The sky is the limit.
  */
 
-async function example_hasSomeErc721Tokens(address: string) {
+async function example_hasSomeErc721Tokens(address: Address) {
   const requiredQuantity = 1n;
 
   const erc721Contract = getContract({
@@ -53,7 +53,7 @@ async function example_hasSomeErc721Tokens(address: string) {
   return ownedBalance >= requiredQuantity;
 }
 
-async function example_hasSomeErc20Tokens(address: string) {
+async function example_hasSomeErc20Tokens(address: Address) {
   const requiredQuantity = 10n; // 10 erc20 token
 
   const erc20Contract = getContract({

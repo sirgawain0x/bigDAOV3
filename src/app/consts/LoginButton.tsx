@@ -2,6 +2,7 @@
 
 import { ConnectButton } from "thirdweb/react";
 import { client } from "./client";
+import { base } from "thirdweb/chains";
 import { generatePayload, isLoggedIn, login, logout } from "../actions/auth";
 
 export const LoginButton = () => {
@@ -9,6 +10,7 @@ export const LoginButton = () => {
     <ConnectButton
       autoConnect={true}
       client={client}
+      chain={base}
       auth={{
         isLoggedIn: async (address) => {
           console.log("checking if logged in!", { address });
