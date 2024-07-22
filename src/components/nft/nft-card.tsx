@@ -10,6 +10,7 @@ import {
   CardHeader,
   CardTitle,
 } from "../ui/card";
+import Claim721AButton from "@/app/tickets-page/Claim721AButton";
 
 type Props = {
   nft: NFT;
@@ -17,8 +18,8 @@ type Props = {
 
 const NFTCard = ({ nft }: Props) => {
   return (
-    <div className="flex flex-col items-center justify-center">
-      <Card className="w-[90vw]">
+    <div className="flex flex-col items-center justify-center my-4">
+      <Card className="w-[80vw]">
         <CardHeader>
           <CardTitle className="mx-auto">{nft?.metadata.name}</CardTitle>
           <CardDescription className="text-wrap text-center">
@@ -28,7 +29,9 @@ const NFTCard = ({ nft }: Props) => {
         <CardContent className="flex items-center justify-center">
           <MediaRenderer client={client} src={nft?.metadata.image} />
         </CardContent>
-        <CardFooter className="text-xs"></CardFooter>
+        <CardFooter className="text-xs">
+          <Claim721AButton />
+        </CardFooter>
       </Card>
     </div>
   );
