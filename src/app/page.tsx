@@ -25,7 +25,7 @@ export default function Home() {
         <div className="mt-6 text-center">
           You are now logged in. <br />
           <Button className="my-4" asChild>
-            <Link href="/gated-page">ENTER</Link>
+            <Link href="/tickets-page">Enter</Link>
           </Button>
         </div>
       )}
