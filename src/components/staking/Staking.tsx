@@ -20,10 +20,10 @@ import {
 } from "thirdweb/extensions/erc721";
 import { NFTCard } from "./NFTCard";
 import { StakedNFTCard } from "./StakedNFTCard";
+import { toast } from "sonner";
 
 export const Staking = () => {
   const account = useActiveAccount();
-
   const [ownedNFTs, setOwnedNFTs] = useState<NFT[]>([]);
 
   const getOwnedNFTs = async () => {
@@ -75,7 +75,6 @@ export const Staking = () => {
           padding: "20px",
         }}
       >
-        <ConnectButton client={client} chain={base} />
         <div
           style={{
             display: "flex",
@@ -86,7 +85,9 @@ export const Staking = () => {
             width: "100%",
           }}
         >
-          <h2 style={{ marginRight: "20px" }}>Claim NFT to Stake</h2>
+          <h2 style={{ marginRight: "20px", color: "#FFF" }}>
+            Pull Ticket to Stake
+          </h2>
           <TransactionButton
             transaction={() =>
               claimTo({
@@ -97,6 +98,7 @@ export const Staking = () => {
             }
             onTransactionConfirmed={() => {
               alert("NFT claimed!");
+              toast("NFT claimed!");
               getOwnedNFTs();
             }}
             style={{
@@ -107,7 +109,7 @@ export const Staking = () => {
               borderRadius: "10px",
             }}
           >
-            Claim NFT
+            Claim Ticket
           </TransactionButton>
         </div>
         <hr
@@ -122,7 +124,7 @@ export const Staking = () => {
             width: "100%",
           }}
         >
-          <h2>Owned NFTs</h2>
+          <h2 style={{ color: "#FFF" }}>Owned Tickets</h2>
           <div
             style={{
               display: "flex",
@@ -141,7 +143,7 @@ export const Staking = () => {
                 />
               ))
             ) : (
-              <p>You own 0 NFTs</p>
+              <p style={{ color: "#FFF" }}>You own 0 Tickets</p>
             )}
           </div>
         </div>
@@ -152,7 +154,7 @@ export const Staking = () => {
           }}
         />
         <div style={{ width: "100%", margin: "20px 0" }}>
-          <h2>Staked NFTs</h2>
+          <h2 style={{ color: "#FFF" }}>Staked NFTs</h2>
           <div
             style={{
               display: "flex",
@@ -171,7 +173,9 @@ export const Staking = () => {
                 />
               ))
             ) : (
-              <p style={{ margin: "20px" }}>No NFTs staked</p>
+              <p style={{ margin: "20px", color: "#FFF" }}>
+                No ticket's staked
+              </p>
             )}
           </div>
         </div>

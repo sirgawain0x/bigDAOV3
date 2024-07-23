@@ -5,7 +5,6 @@ import { client } from "../consts/client";
 import { base } from "thirdweb/chains";
 import { getNFT } from "thirdweb/extensions/erc721";
 import NFTCard from "@/components/nft/nft-card";
-import Claim721AButton from "./Claim721AButton";
 
 export const TicketContent = () => {
   const ticketContract = getContract({
@@ -20,7 +19,18 @@ export const TicketContent = () => {
   });
   console.log("NFT data", firstNFT);
   return (
-    <div className="flex flex-col">
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+        width: "100%",
+      }}
+    >
+      <h1 style={{ marginBottom: "20px" }} className="text-6xl">
+        Tickets
+      </h1>
       {!nftLoading && firstNFT && <NFTCard nft={firstNFT} />}
       <div className="max-w-lg mx-auto">
         <PayEmbed

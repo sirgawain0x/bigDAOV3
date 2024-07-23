@@ -1,6 +1,7 @@
-import { Staking } from "@/components/staking/Staking";
+import { useReadContract } from "thirdweb/react";
+import { Voting } from "@/components/voting/Voting";
 
-export default function StakePage() {
+export default function VotePage() {
   return (
     <div
       style={{
@@ -12,9 +13,9 @@ export default function StakePage() {
       }}
     >
       <h1 style={{ marginBottom: "20px" }} className="text-6xl">
-        Stake Rewards
+        The Board
       </h1>
-      <Staking />
+      <Voting />
     </div>
   );
 }

@@ -31,7 +31,9 @@ export const NFTCard = ({
           width: "200px",
         }}
       />
-      <p style={{ margin: "0 10px 10px 10px" }}>{nft.metadata.name}</p>
+      <p style={{ margin: "0 10px 10px 10px", color: "#FFF" }}>
+        {nft.metadata.name}
+      </p>
       <button
         onClick={() => setIsModalOpen(true)}
         style={{
@@ -90,7 +92,9 @@ export const NFTCard = ({
                 Close
               </button>
             </div>
-            <h3 style={{ margin: "10px 0" }}>You about to stake:</h3>
+            <h3 style={{ margin: "10px 0", color: "#fff" }}>
+              You're about to stake:
+            </h3>
             <MediaRenderer
               client={client}
               src={nft.metadata.image}
@@ -125,7 +129,7 @@ export const NFTCard = ({
                   })
                 }
                 onTransactionConfirmed={() => {
-                  alert("Staked!");
+                  alert("Your ticket is staked!");
                   setIsModalOpen(false);
                   refetch();
                   refecthStakedInfo();

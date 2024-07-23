@@ -1,5 +1,6 @@
 "use client";
-import { useActiveAccount } from "thirdweb/react";
+import { useActiveAccount, useReadContract } from "thirdweb/react";
+import { toEther } from "thirdweb";
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -11,7 +12,8 @@ import {
   NavigationMenuViewport,
   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
-import { ListItem } from "@/components/navigation/ListItem";
+import { balanceOf } from "thirdweb/extensions/erc20";
+import { REWARD_TOKEN_CONTRACT } from "@/lib/contracts";
 import Link from "next/link";
 import { LoginButton } from "@/app/consts/LoginButton";
 import { useState } from "react";
@@ -19,6 +21,14 @@ import { useState } from "react";
 const Navbar = () => {
   const activeAccount = useActiveAccount();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const {
+    data: tokenBalance,
+    isLoading: isTokenBalanceLoading,
+    refetch: refetchTokenBalance,
+  } = useReadContract(balanceOf, {
+    contract: REWARD_TOKEN_CONTRACT,
+    address: activeAccount?.address || "",
+  });
 
   return (
     <div className="my-4 mx-4 md:columns-xs xs:columns-3xs">
@@ -74,7 +84,7 @@ const Navbar = () => {
                   </Link>
                 </NavigationMenuItem>
                 <NavigationMenuItem>
-                  <Link href="/dao" legacyBehavior passHref>
+                  <Link href="/voting-page" legacyBehavior passHref>
                     <NavigationMenuLink
                       className={navigationMenuTriggerStyle()}
                     >
@@ -82,14 +92,19 @@ const Navbar = () => {
                     </NavigationMenuLink>
                   </Link>
                 </NavigationMenuItem>
-                <NavigationMenuItem>
-                  <Link href="/burnToClaim" legacyBehavior passHref>
+                {isTokenBalanceLoading ?? (
+                  <NavigationMenuItem>
                     <NavigationMenuLink
                       className={navigationMenuTriggerStyle()}
                     >
-                      Redeem
+                      Loading...
                     </NavigationMenuLink>
-                  </Link>
+                  </NavigationMenuItem>
+                )}
+                <NavigationMenuItem>
+                  <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                    {toEther(BigInt(tokenBalance?.toString() || "0"))} BIG
+                  </NavigationMenuLink>
                 </NavigationMenuItem>
               </>
             )}

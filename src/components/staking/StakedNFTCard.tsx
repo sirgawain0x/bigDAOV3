@@ -36,7 +36,9 @@ export const StakedNFTCard: React.FC<StakedNFTCardProps> = ({
           width: "200px",
         }}
       />
-      <p style={{ margin: "0 10px 10px 10px" }}>{nft?.metadata.name}</p>
+      <p style={{ margin: "0 10px 10px 10px", color: "#FFF" }}>
+        {nft?.metadata.name}
+      </p>
       <TransactionButton
         transaction={() =>
           prepareContractCall({
@@ -48,7 +50,7 @@ export const StakedNFTCard: React.FC<StakedNFTCardProps> = ({
         onTransactionConfirmed={() => {
           refetchOwnedNFTs();
           refetchStakedInfo();
-          alert("Withdrawn!");
+          alert("Ticket has been withdrawn!");
         }}
         style={{
           border: "none",
