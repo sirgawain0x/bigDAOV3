@@ -36,7 +36,7 @@ function Claim721AButton() {
         {activeAccount ? (
           <p className="mx-auto">You have {nftOwned} tickets</p>
         ) : (
-          <p className="mx-auto">Connect Wallet to claim a ticket.</p>
+          <p className="mx-auto">Connect to claim a ticket.</p>
         )}
       </div>
 

@@ -3,7 +3,6 @@
 import { ConnectButton } from "thirdweb/react";
 import { client } from "./client";
 import { base } from "thirdweb/chains";
-import { generatePayload, isLoggedIn, login, logout } from "../actions/auth";
 import { createWallet, inAppWallet } from "thirdweb/wallets";
 
 const wallets = [
@@ -22,6 +21,13 @@ export const LoginButton = () => {
         sponsorGas: false,
       }}
       autoConnect={true}
+      appMetadata={{
+        name: "BigDao",
+        url: "https://big.creativeplatform.xyz",
+        description: "A family owned DAO",
+        logoUrl:
+          "https://bafybeiggcmjpnxrsywdq6y5mks6l5egrxudaelsjedxwoe5yfyyw7xjnu4.ipfs.w3s.link/BigDAO.png",
+      }}
       supportedNFTs={{
         8453: ["0x214cDD4C76Aa2A632Cc64AF522326f2a1f191908"],
       }}
@@ -51,21 +57,6 @@ export const LoginButton = () => {
           },
         },
       }}
-      // auth={{
-      //   isLoggedIn: async (address) => {
-      //     console.log("checking if logged in!", { address });
-      //     return await isLoggedIn();
-      //   },
-      //   doLogin: async (params) => {
-      //     console.log("logging in!");
-      //     await login(params);
-      //   },
-      //   getLoginPayload: async ({ address }) => generatePayload({ address }),
-      //   doLogout: async () => {
-      //     console.log("logging out!");
-      //     await logout();
-      //   },
-      // }}
     />
   );
 };
