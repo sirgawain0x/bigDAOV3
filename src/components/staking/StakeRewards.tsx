@@ -35,14 +35,7 @@ export const StakeRewards = () => {
   }, []);
 
   return (
-    <div
-      style={{
-        width: "100%",
-        margin: "20px 0",
-        display: "flex",
-        flexDirection: "column",
-      }}
-    >
+    <div className="flex flex-col w-full p-2">
       {!isTokenBalanceLoading && (
         <p style={{ color: "#FFF" }}>
           Wallet Balance: {toEther(BigInt(tokenBalance!.toString()))}

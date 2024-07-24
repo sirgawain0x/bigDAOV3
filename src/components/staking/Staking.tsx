@@ -65,28 +65,14 @@ export const Staking = () => {
   if (account) {
     return (
       <div
+        className="flex flex-col items-center justify-center border rounded-lg w-10/12"
         style={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
           backgroundColor: "#151515",
-          borderRadius: "8px",
-          width: "500px",
-          padding: "20px",
         }}
       >
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "row",
-            alignItems: "center",
-            justifyContent: "space-between",
-            margin: "20px 0",
-            width: "100%",
-          }}
-        >
+        <div className="flex flex-row items-center justify-between w-full p-2">
           <h2 style={{ marginRight: "20px", color: "#FFF" }}>
-            Pull Ticket to Stake
+            Claim to Stake 👉🏽
           </h2>
           <TransactionButton
             transaction={() =>
@@ -118,12 +104,7 @@ export const Staking = () => {
             border: "1px solid #333",
           }}
         />
-        <div
-          style={{
-            margin: "20px 0",
-            width: "100%",
-          }}
-        >
+        <div className="p-2 w-full">
           <h2 style={{ color: "#FFF" }}>Owned Tickets</h2>
           <div
             style={{
@@ -153,7 +134,7 @@ export const Staking = () => {
             border: "1px solid #333",
           }}
         />
-        <div style={{ width: "100%", margin: "20px 0" }}>
+        <div className="p-2 w-full">
           <h2 style={{ color: "#FFF" }}>Staked NFTs</h2>
           <div
             style={{
