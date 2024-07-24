@@ -10,20 +10,12 @@ export const Voting = () => {
     params: [],
   });
   return (
-    <div
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        justifyContent: "center",
-        width: "100%",
-      }}
-    >
+    <div className="flex flex-col items-center justify-center">
       <h1 style={{ marginBottom: "20px" }} className="text-6xl">
         Voting
       </h1>
       {proposals?.map((proposal: any, index: number) => (
-        <div key={index}>
+        <div key={index} className="p-4 border rounded-lg shadow-md">
           <h2>{proposal.title}</h2>
           <p>{proposal.description}</p>
           <p>Votes: {proposal.votes || 0}</p>

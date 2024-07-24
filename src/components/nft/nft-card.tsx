@@ -21,7 +21,9 @@ const NFTCard = ({ nft }: Props) => {
     <div className="flex flex-col items-center justify-center my-4">
       <Card className="w-[80vw]">
         <CardHeader>
-          <CardTitle className="mx-auto">{nft?.metadata.name}</CardTitle>
+          <CardTitle className="mx-auto my-4">
+            Juneteenth Unity Celebration
+          </CardTitle>
           <CardDescription className="text-wrap text-center">
             {nft?.metadata.description}
           </CardDescription>
