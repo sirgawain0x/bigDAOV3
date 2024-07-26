@@ -28,6 +28,21 @@ export const LoginButton = () => {
         logoUrl:
           "https://bafybeiggcmjpnxrsywdq6y5mks6l5egrxudaelsjedxwoe5yfyyw7xjnu4.ipfs.w3s.link/BigDAO.png",
       }}
+      connectModal={{
+        privacyPolicyUrl:
+          "https://app.charmverse.io/creative-like-brown-fowl/big-dao-privacy-policy-9035723468020447",
+        termsOfServiceUrl:
+          "https://app.charmverse.io/creative-like-brown-fowl/big-dao-terms-of-service-5694437438861041",
+        welcomeScreen: {
+          title: "Welcome to BigDAO",
+          subtitle: "Where dreams grow big!",
+          img: {
+            src: "https://bafybeiggcmjpnxrsywdq6y5mks6l5egrxudaelsjedxwoe5yfyyw7xjnu4.ipfs.w3s.link/BigDAO.png",
+            width: 200,
+            height: 200,
+          },
+        },
+      }}
       supportedNFTs={{
         8453: ["0x214cDD4C76Aa2A632Cc64AF522326f2a1f191908"],
       }}
@@ -46,17 +61,6 @@ export const LoginButton = () => {
       wallets={wallets}
       showAllWallets={false}
       theme={"light"}
-      connectModal={{
-        welcomeScreen: {
-          title: "Welcome to BigDAO",
-          subtitle: "Where dreams grow big!",
-          img: {
-            src: "https://bafybeiggcmjpnxrsywdq6y5mks6l5egrxudaelsjedxwoe5yfyyw7xjnu4.ipfs.w3s.link/BigDAO.png",
-            width: 200,
-            height: 200,
-          },
-        },
-      }}
     />
   );
 };
