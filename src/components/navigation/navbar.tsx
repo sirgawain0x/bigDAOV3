@@ -82,6 +82,15 @@ const Navbar = () => {
                     Marketplace
                   </NavigationMenuLink>
                 </NavigationMenuItem>
+                <NavigationMenuItem>
+                  <Link href="/leaderboard" legacyBehavior passHref>
+                    <NavigationMenuLink
+                      className={navigationMenuTriggerStyle()}
+                    >
+                      Leaderboard
+                    </NavigationMenuLink>
+                  </Link>
+                </NavigationMenuItem>
               </>
             )}
           </NavigationMenuList>
