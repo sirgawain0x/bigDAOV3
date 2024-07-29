@@ -60,25 +60,38 @@ export default function LeaderboardPage() {
   }, []);
 
   return (
-    <div className="flex flex-col">
-      <div className="mx-auto">
-        <Image
-          src={metadata.bannerUrl}
-          alt="Big DAO banner"
-          width={1500}
-          height={500}
-        />
-      </div>
-      <div className="flex flex-col items-center justify-center mx-16 my-16">
-        <h1 className="text-3xl font-bold">{metadata.name}</h1>
-        <p className="text-lg">{metadata.description}</p>
-        <div className="flex flex-col items-center justify-start mx-16 my-16">
-          <p>{data.length} Members</p>
+    <>
+      <div>
+        <div className="relative w-11/12 h-[200px] sm:h-[300px] md:h-[400px] lg:h-[500px] xl:h-[500px] 2xl:h-[500px]">
+          <Image
+            fill={true}
+            //style={{ objectFit: "cover", position: "absolute" }}
+            loading="lazy"
+            src={metadata.bannerUrl}
+            alt="Big DAO Leaderboard"
+          />
         </div>
       </div>
-      <div className="mx-16">
+      <div className="flex flex-col items-center justify-center mx-4 sm:mx-8 md:mx-16 lg:mx-24 my-8 sm:my-12 md:my-16 lg:my-20">
+        <div className="mb-4 text-center">
+          <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold">
+            {metadata.name}
+          </h1>
+        </div>
+        <div className="flex flex-col mx-auto items-center justify-center px-14">
+          <p className="text-base sm:text-lg md:text-xl text-center">
+            {metadata.description}
+          </p>
+        </div>
+        <div className="flex flex-col items-center justify-start mt-4">
+          <p className="text-sm sm:text-base md:text-lg">
+            {data.length} Members
+          </p>
+        </div>
+      </div>
+      <div className="flex flex-col w-4/5 mx-auto mb-12">
         <DataTable columns={columns} data={data} />
       </div>
-    </div>
+    </>
   );
 }
