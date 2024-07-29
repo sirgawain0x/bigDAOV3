@@ -19,26 +19,28 @@ const Navbar = () => {
     <div className="my-4 mx-4 md:columns-xs xs:columns-3xs">
       <div className="flex justify-between items-center">
         <LoginButton />
-        <button
-          className="md:hidden"
-          onClick={() => setIsMenuOpen(!isMenuOpen)}
-        >
-          {/* Menu Icon */}
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            strokeWidth="2"
-            stroke="currentColor"
-            className="w-6 h-6"
+        {activeAccount && (
+          <button
+            className="md:hidden"
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
           >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M4 6h16M4 12h16m-7 6h7"
-            />
-          </svg>
-        </button>
+            {/* Menu Icon */}
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth="2"
+              stroke="currentColor"
+              className="w-6 h-6"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M4 6h16M4 12h16m-7 6h7"
+              />
+            </svg>
+          </button>
+        )}
       </div>
       <div
         className={`${
