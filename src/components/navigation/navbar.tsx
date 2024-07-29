@@ -77,11 +77,11 @@ const Navbar = () => {
                     </NavigationMenuLink>
                   </Link>
                 </NavigationMenuItem>
-                <NavigationMenuItem>
+                {/* <NavigationMenuItem>
                   <NavigationMenuLink className={navigationMenuTriggerStyle()}>
                     Marketplace
                   </NavigationMenuLink>
-                </NavigationMenuItem>
+                </NavigationMenuItem> */}
                 <NavigationMenuItem>
                   <Link href="/leaderboard" legacyBehavior passHref>
                     <NavigationMenuLink
