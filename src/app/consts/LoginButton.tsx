@@ -1,5 +1,4 @@
 "use client";
-
 import { ConnectButton } from "thirdweb/react";
 import { client } from "./client";
 import { base } from "thirdweb/chains";
