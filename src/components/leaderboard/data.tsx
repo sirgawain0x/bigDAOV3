@@ -1,34 +1,16 @@
 "use client";
-
 import { useEffect, useState } from "react";
 import { Points, columns } from "@/components/leaderboard/columns";
 import { DataTable } from "@/components/leaderboard/data-table";
 import Image from "next/image";
 import { StackClient } from "@stackso/js-core";
+import { shortenAddress } from "thirdweb/utils";
 
 // Initialize the client
 const stack = new StackClient({
   apiKey: `${process.env.NEXT_PUBLIC_STACK_API_KEY}`, // Use NEXT_PUBLIC_ prefix for client-side env vars
   pointSystemId: 2839,
 });
-
-interface LeaderboardItem {
-  uniqueId: number;
-  address: string;
-  points: number;
-  identities?: [{}];
-}
-
-interface LeaderboardProps {
-  leaderboard: {
-    leaderboard: LeaderboardItem[];
-    metadata: {
-      bannerUrl: string;
-      name: string;
-      description: string;
-    };
-  };
-}
 
 export default function LeaderboardPage() {
   const [data, setData] = useState<Points[]>([]);
@@ -42,17 +24,17 @@ export default function LeaderboardPage() {
     const fetchData = async () => {
       const leaderboard = await stack.getLeaderboard();
       setData(
-        leaderboard.leaderboard.map((item, i) => ({
+        leaderboard?.leaderboard.map((item, i) => ({
           uniqueId: i + 1, // Ensure unique IDs start at 1
-          address: item.address,
+          address: shortenAddress(item.address),
           points: item.points,
           identities: item.identities,
         }))
       );
       setMetadata({
-        bannerUrl: leaderboard.metadata.bannerUrl,
-        name: leaderboard.metadata.name,
-        description: leaderboard.metadata.description,
+        bannerUrl: leaderboard?.metadata.bannerUrl,
+        name: leaderboard?.metadata.name,
+        description: leaderboard?.metadata.description,
       });
     };
 
@@ -65,7 +47,6 @@ export default function LeaderboardPage() {
         <div className="relative w-11/12 h-[200px] sm:h-[300px] md:h-[400px] lg:h-[500px] xl:h-[500px] 2xl:h-[500px]">
           <Image
             fill={true}
-            //style={{ objectFit: "cover", position: "absolute" }}
             loading="lazy"
             src={metadata.bannerUrl}
             alt="Big DAO Leaderboard"
