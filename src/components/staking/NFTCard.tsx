@@ -93,7 +93,7 @@ export const NFTCard = ({
               </button>
             </div>
             <h3 style={{ margin: "10px 0", color: "#fff" }}>
-              You're about to stake:
+              You&apos;re about to stake:
             </h3>
             <MediaRenderer
               client={client}

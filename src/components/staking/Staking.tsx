@@ -1,9 +1,5 @@
 "use client";
-
-import { base } from "thirdweb/chains";
-import { client } from "@/app/consts/client";
 import {
-  ConnectButton,
   TransactionButton,
   useActiveAccount,
   useReadContract,
@@ -11,7 +7,7 @@ import {
 import { StakeRewards } from "./StakeRewards";
 import { NFT_CONTRACT, STAKING_CONTRACT } from "@/lib/contracts";
 import { NFT } from "thirdweb";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import {
   claimTo,
   getNFTs,
@@ -26,7 +22,7 @@ export const Staking = () => {
   const account = useActiveAccount();
   const [ownedNFTs, setOwnedNFTs] = useState<NFT[]>([]);
 
-  const getOwnedNFTs = async () => {
+  const getOwnedNFTs = useCallback(async () => {
     let ownedNFTs: NFT[] = [];
 
     const totalNFTSupply = await totalSupply({
@@ -48,13 +44,17 @@ export const Staking = () => {
       }
     }
     setOwnedNFTs(ownedNFTs);
-  };
+  }, [account?.address]);
 
   useEffect(() => {
+    const getOwnedNFTs = async () => {
+      // existing code here
+    };
+
     if (account) {
       getOwnedNFTs();
     }
-  }, [account]);
+  }, [account, getOwnedNFTs]);
 
   const { data: stakedInfo, refetch: refetchStakedInfo } = useReadContract({
     contract: STAKING_CONTRACT,
@@ -155,7 +155,7 @@ export const Staking = () => {
               ))
             ) : (
               <p style={{ margin: "20px", color: "#FFF" }}>
-                No ticket's staked
+                No ticket&apos;s staked
               </p>
             )}
           </div>
