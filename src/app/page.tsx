@@ -11,7 +11,7 @@ export default function Home() {
       <div className="mx-auto">
         <h1 className="text-4xl font-bold">Welcome to</h1>
       </div>
-      <div className="mx-auto">
+      <div className="mx-auto flex">
         <Image
           src="/BigDAOLogo2.svg"
           alt="BigDAO"
@@ -23,7 +23,7 @@ export default function Home() {
 
       {account && (
         <div className="mt-6 text-center">
-          You are now logged in. <br />
+          You are now logged in! <br />
           <Button className="my-4" asChild>
             <Link href="/tickets-page">Enter</Link>
           </Button>

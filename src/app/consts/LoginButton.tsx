@@ -28,6 +28,7 @@ export const LoginButton = () => {
           "https://bafybeiggcmjpnxrsywdq6y5mks6l5egrxudaelsjedxwoe5yfyyw7xjnu4.ipfs.w3s.link/BigDAO.png",
       }}
       connectModal={{
+        size: "wide",
         privacyPolicyUrl:
           "https://app.charmverse.io/creative-like-brown-fowl/big-dao-privacy-policy-9035723468020447",
         termsOfServiceUrl:
