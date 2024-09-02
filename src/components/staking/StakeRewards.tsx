@@ -32,7 +32,7 @@ export const StakeRewards = () => {
       refetchStakedInfo();
     }, 1000);
     return () => clearInterval(interval);
-  }, []);
+  }, [refetchStakedInfo]);
 
   return (
     <div className="flex flex-col w-full p-2">

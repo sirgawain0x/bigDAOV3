@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { TransactionButton, useActiveAccount } from "thirdweb/react";
 import { getContract, type Address } from "thirdweb";
 import { balanceOf, claimTo } from "thirdweb/extensions/erc721";
@@ -16,7 +16,7 @@ function Claim721AButton() {
   });
   const [nftOwned, setNftOwned] = useState<string>("0");
 
-  const getOwnedNFT = async () => {
+  const getOwnedNFT = useCallback(async () => {
     if (activeAccount) {
       const balance = await balanceOf({
         contract: contract,
@@ -24,11 +24,11 @@ function Claim721AButton() {
       });
       setNftOwned(balance.toString());
     }
-  };
+  }, [activeAccount, contract, setNftOwned]);
 
   useEffect(() => {
     getOwnedNFT();
-  }, [activeAccount]);
+  }, [activeAccount, getOwnedNFT]);
 
   return (
     <div className="mx-auto">
