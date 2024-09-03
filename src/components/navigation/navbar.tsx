@@ -11,6 +11,18 @@ import Image from "next/image";
 import Link from "next/link";
 import { LoginButton } from "@/app/consts/LoginButton";
 import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import {
+  Sheet,
+  SheetClose,
+  SheetContent,
+  SheetDescription,
+  SheetFooter,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
+import { MenuIcon } from "lucide-react";
 
 const Navbar = () => {
   const activeAccount = useActiveAccount();
@@ -31,28 +43,78 @@ const Navbar = () => {
         </div>
 
         {/* Mobile Menu Button (replaces logo on mobile) */}
-
         <div className="md:hidden">
           {activeAccount && (
-            <button onClick={() => setIsMenuOpen(!isMenuOpen)}>
-              {/* Menu Icon */}
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth="2"
-                stroke="currentColor"
-                className="w-6 h-6"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M4 6h16M4 12h16m-7 6h7"
-                />
-              </svg>
-            </button>
+            <Sheet open={isMenuOpen} onOpenChange={setIsMenuOpen}>
+              <SheetTrigger asChild>
+                <Button variant="outline" size="icon" className="lg:hidden">
+                  <MenuIcon className="w-6 h-6" />
+                  <span className="sr-only">Toggle navigation menu</span>
+                </Button>
+              </SheetTrigger>
+              <SheetContent side="left">
+                <div className="flex flex-col items-center space-y-4">
+                  {/* Logo inside the mobile menu */}
+                  <div className="mb-4">
+                    <Link href="/" passHref>
+                      <Image
+                        src="/BigDAOLogo2.svg"
+                        alt="Logo"
+                        width={100}
+                        height={100}
+                      />
+                    </Link>
+                  </div>
+                  <NavigationMenu>
+                    <NavigationMenuList className="flex flex-col space-y-4">
+                      <NavigationMenuItem>
+                        <Link href="/tickets-page" legacyBehavior passHref>
+                          <NavigationMenuLink
+                            className={navigationMenuTriggerStyle()}
+                            onClick={handleLinkClick}
+                          >
+                            Tickets
+                          </NavigationMenuLink>
+                        </Link>
+                      </NavigationMenuItem>
+                      <NavigationMenuItem>
+                        <Link href="/stake-page" legacyBehavior passHref>
+                          <NavigationMenuLink
+                            className={navigationMenuTriggerStyle()}
+                            onClick={handleLinkClick}
+                          >
+                            Stake
+                          </NavigationMenuLink>
+                        </Link>
+                      </NavigationMenuItem>
+                      <NavigationMenuItem>
+                        <Link href="/voting-page" legacyBehavior passHref>
+                          <NavigationMenuLink
+                            className={navigationMenuTriggerStyle()}
+                            onClick={handleLinkClick}
+                          >
+                            Vote
+                          </NavigationMenuLink>
+                        </Link>
+                      </NavigationMenuItem>
+                      <NavigationMenuItem>
+                        <Link href="/leaderboard" legacyBehavior passHref>
+                          <NavigationMenuLink
+                            className={navigationMenuTriggerStyle()}
+                            onClick={handleLinkClick}
+                          >
+                            Leaderboard
+                          </NavigationMenuLink>
+                        </Link>
+                      </NavigationMenuItem>
+                    </NavigationMenuList>
+                  </NavigationMenu>
+                </div>
+              </SheetContent>
+            </Sheet>
           )}
         </div>
+
         {/* Centered Navigation Menu (visible on larger screens) */}
         <div className="hidden md:flex md:flex-1 md:justify-center">
           <NavigationMenu>
@@ -105,65 +167,6 @@ const Navbar = () => {
         <div className="flex items-center">
           <LoginButton />
         </div>
-      </div>
-
-      {/* Mobile Dropdown menu with Logo inside */}
-      <div className={`${isMenuOpen ? "block" : "hidden"} md:hidden mt-4`}>
-        <NavigationMenu>
-          <NavigationMenuList className="flex flex-col space-y-4">
-            {/* Logo inside the mobile menu */}
-            <div className="flex justify-center mb-4">
-              <Link href="/" passHref>
-                <Image
-                  src="/BigDAOLogo2.svg"
-                  alt="Logo"
-                  width={100}
-                  height={100}
-                />
-              </Link>
-            </div>
-            <NavigationMenuItem>
-              <Link href="/tickets-page" legacyBehavior passHref>
-                <NavigationMenuLink
-                  className={navigationMenuTriggerStyle()}
-                  onClick={handleLinkClick}
-                >
-                  Tickets
-                </NavigationMenuLink>
-              </Link>
-            </NavigationMenuItem>
-            <NavigationMenuItem>
-              <Link href="/stake-page" legacyBehavior passHref>
-                <NavigationMenuLink
-                  className={navigationMenuTriggerStyle()}
-                  onClick={handleLinkClick}
-                >
-                  Stake
-                </NavigationMenuLink>
-              </Link>
-            </NavigationMenuItem>
-            <NavigationMenuItem>
-              <Link href="/voting-page" legacyBehavior passHref>
-                <NavigationMenuLink
-                  className={navigationMenuTriggerStyle()}
-                  onClick={handleLinkClick}
-                >
-                  Vote
-                </NavigationMenuLink>
-              </Link>
-            </NavigationMenuItem>
-            <NavigationMenuItem>
-              <Link href="/leaderboard" legacyBehavior passHref>
-                <NavigationMenuLink
-                  className={navigationMenuTriggerStyle()}
-                  onClick={handleLinkClick}
-                >
-                  Leaderboard
-                </NavigationMenuLink>
-              </Link>
-            </NavigationMenuItem>
-          </NavigationMenuList>
-        </NavigationMenu>
       </div>
     </div>
   );

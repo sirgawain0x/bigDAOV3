@@ -84,14 +84,7 @@ export const Staking = () => {
         />
         <div className="p-2 w-full">
           <h2 style={{ color: "#FFF" }}>Owned Tickets</h2>
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "row",
-              flexWrap: "wrap",
-              width: "500px",
-            }}
-          >
+          <div className="flex flex-row items-center justify-between w-full mx-auto">
             {ownedNFTs ? (
               ownedNFTs
                 .filter((nft: NFT) => !stakedInfo?.[0]?.includes(nft.id)) // Filter out staked NFTs
