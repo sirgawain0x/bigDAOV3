@@ -14,12 +14,8 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Sheet,
-  SheetClose,
   SheetContent,
-  SheetDescription,
-  SheetFooter,
   SheetHeader,
-  SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { MenuIcon } from "lucide-react";
@@ -38,7 +34,13 @@ const Navbar = () => {
         {/* Logo on the far left (visible only on larger screens) */}
         <div className="hidden md:block">
           <Link href="/" passHref>
-            <Image src="/BigDAOLogo2.svg" alt="Logo" width={100} height={100} />
+            <Image
+              src="/BigDAOLogo2.svg"
+              alt="Logo"
+              width={100}
+              height={100}
+              priority
+            />
           </Link>
         </div>
 
@@ -52,19 +54,22 @@ const Navbar = () => {
                   <span className="sr-only">Toggle navigation menu</span>
                 </Button>
               </SheetTrigger>
+
               <SheetContent side="left">
                 <div className="flex flex-col items-center space-y-4">
                   {/* Logo inside the mobile menu */}
-                  <div className="mb-4">
-                    <Link href="/" passHref>
-                      <Image
-                        src="/BigDAOLogo2.svg"
-                        alt="Logo"
-                        width={100}
-                        height={100}
-                      />
-                    </Link>
-                  </div>
+                  <SheetHeader onClick={handleLinkClick}>
+                    <div className="mb-4">
+                      <Link href="/" passHref>
+                        <Image
+                          src="/BigDAOLogo2.svg"
+                          alt="Logo"
+                          width={100}
+                          height={100}
+                        />
+                      </Link>
+                    </div>
+                  </SheetHeader>
                   <NavigationMenu>
                     <NavigationMenuList className="flex flex-col space-y-4">
                       <NavigationMenuItem>

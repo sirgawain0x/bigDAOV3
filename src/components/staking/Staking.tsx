@@ -5,7 +5,6 @@ import {
   useReadContract,
 } from "thirdweb/react";
 import { getOwnedNFTs } from "thirdweb/extensions/erc721";
-import { StakeRewards } from "./StakeRewards";
 import { NFT_CONTRACT, STAKING_CONTRACT } from "@/lib/contracts";
 import { NFT } from "thirdweb";
 import { claimTo } from "thirdweb/extensions/erc721";
@@ -40,9 +39,9 @@ export const Staking = () => {
         }}
       >
         <div className="flex flex-row items-center justify-between w-full p-2">
-          <h2 style={{ marginRight: "20px", color: "#FFF" }}>
-            Claim to Stake 👉🏽
-          </h2>
+          <p style={{ marginRight: "20px", color: "#FFF" }}>
+            Claim a Ticket to Stake.
+          </p>
           <TransactionButton
             style={{
               fontSize: "12px",
