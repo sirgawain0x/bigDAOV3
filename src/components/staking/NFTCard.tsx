@@ -8,13 +8,13 @@ import { toast } from "sonner";
 
 type OwnedNFTsProps = {
   nft: NFT;
-  refetch: () => void;
+  refetchOwnedNFTs: () => void;
   refetchStakedInfo: () => void;
 };
 
 export const NFTCard = ({
   nft,
-  refetch,
+  refetchOwnedNFTs,
   refetchStakedInfo,
 }: OwnedNFTsProps) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -133,7 +133,7 @@ export const NFTCard = ({
                   toast("Your ticket is staked!");
                   console.log("Ticket staked!", receipt.transactionHash);
                   setIsModalOpen(false);
-                  refetch();
+                  refetchOwnedNFTs();
                   refetchStakedInfo();
                 }}
                 style={{
