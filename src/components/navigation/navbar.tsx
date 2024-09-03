@@ -16,6 +16,10 @@ const Navbar = () => {
   const activeAccount = useActiveAccount();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
+  const handleLinkClick = () => {
+    setIsMenuOpen(false);
+  };
+
   return (
     <div className="my-4 mx-4">
       <div className="flex justify-between items-center">
@@ -120,28 +124,40 @@ const Navbar = () => {
             </div>
             <NavigationMenuItem>
               <Link href="/tickets-page" legacyBehavior passHref>
-                <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                <NavigationMenuLink
+                  className={navigationMenuTriggerStyle()}
+                  onClick={handleLinkClick}
+                >
                   Tickets
                 </NavigationMenuLink>
               </Link>
             </NavigationMenuItem>
             <NavigationMenuItem>
               <Link href="/stake-page" legacyBehavior passHref>
-                <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                <NavigationMenuLink
+                  className={navigationMenuTriggerStyle()}
+                  onClick={handleLinkClick}
+                >
                   Stake
                 </NavigationMenuLink>
               </Link>
             </NavigationMenuItem>
             <NavigationMenuItem>
               <Link href="/voting-page" legacyBehavior passHref>
-                <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                <NavigationMenuLink
+                  className={navigationMenuTriggerStyle()}
+                  onClick={handleLinkClick}
+                >
                   Vote
                 </NavigationMenuLink>
               </Link>
             </NavigationMenuItem>
             <NavigationMenuItem>
               <Link href="/leaderboard" legacyBehavior passHref>
-                <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                <NavigationMenuLink
+                  className={navigationMenuTriggerStyle()}
+                  onClick={handleLinkClick}
+                >
                   Leaderboard
                 </NavigationMenuLink>
               </Link>

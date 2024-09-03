@@ -7,6 +7,7 @@ import { REWARD_TOKEN_CONTRACT, STAKING_CONTRACT } from "@/lib/contracts";
 import { prepareContractCall, toEther } from "thirdweb";
 import { useEffect } from "react";
 import { balanceOf } from "thirdweb/extensions/erc721";
+import { toast } from "sonner";
 
 export const StakeRewards = () => {
   const account = useActiveAccount();
@@ -45,17 +46,6 @@ export const StakeRewards = () => {
         Stake Rewards: {stakedInfo && toEther(BigInt(stakedInfo[1].toString()))}
       </h2>
       <TransactionButton
-        transaction={() =>
-          prepareContractCall({
-            contract: STAKING_CONTRACT,
-            method: "claimRewards",
-          })
-        }
-        onTransactionConfirmed={() => {
-          alert("Rewards claimed!");
-          refetchStakedInfo();
-          refetchTokenBalance();
-        }}
         style={{
           border: "none",
           backgroundColor: "#333",
@@ -65,6 +55,26 @@ export const StakeRewards = () => {
           cursor: "pointer",
           width: "100%",
           fontSize: "12px",
+        }}
+        transaction={() =>
+          prepareContractCall({
+            contract: STAKING_CONTRACT,
+            method: "claimRewards",
+          })
+        }
+        onTransactionSent={(result) => {
+          console.log("Claiming rewards...", result.transactionHash);
+          toast("Claiming rewards...");
+        }}
+        onTransactionConfirmed={(receipt) => {
+          console.log("Rewards claimed!", receipt.transactionHash);
+          refetchStakedInfo();
+          refetchTokenBalance();
+          toast("Rewards claimed!");
+        }}
+        onError={(error) => {
+          console.error("Transaction error", error);
+          toast("Transaction error");
         }}
       >
         Claim Rewards

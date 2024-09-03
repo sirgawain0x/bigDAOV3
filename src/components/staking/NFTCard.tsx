@@ -4,17 +4,18 @@ import { MediaRenderer, TransactionButton } from "thirdweb/react";
 import { NFT_CONTRACT, STAKING_CONTRACT } from "@/lib/contracts";
 import { useState } from "react";
 import { approve } from "thirdweb/extensions/erc721";
+import { toast } from "sonner";
 
 type OwnedNFTsProps = {
   nft: NFT;
   refetch: () => void;
-  refecthStakedInfo: () => void;
+  refetchStakedInfo: () => void;
 };
 
 export const NFTCard = ({
   nft,
   refetch,
-  refecthStakedInfo,
+  refetchStakedInfo,
 }: OwnedNFTsProps) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isApproved, setIsApproved] = useState(false);
@@ -128,17 +129,18 @@ export const NFTCard = ({
                     params: [[nft.id]],
                   })
                 }
-                onTransactionConfirmed={() => {
-                  alert("Your ticket is staked!");
+                onTransactionConfirmed={(receipt) => {
+                  toast("Your ticket is staked!");
+                  console.log("Ticket staked!", receipt.transactionHash);
                   setIsModalOpen(false);
                   refetch();
-                  refecthStakedInfo();
+                  refetchStakedInfo();
                 }}
                 style={{
                   width: "100%",
                 }}
               >
-                Stake
+                Stake it
               </TransactionButton>
             )}
           </div>
