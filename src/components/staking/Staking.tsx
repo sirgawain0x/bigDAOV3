@@ -105,7 +105,7 @@ export const Staking = () => {
           }}
         />
         <div className="p-2 w-full">
-          <h2 style={{ color: "#FFF" }}>Staked NFTs</h2>
+          <h2 style={{ color: "#FFF" }}>Staked Tickets</h2>
           <div
             style={{
               display: "flex",
