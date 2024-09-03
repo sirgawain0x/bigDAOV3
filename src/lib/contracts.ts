@@ -2,6 +2,7 @@ import { base } from "thirdweb/chains";
 import { client } from "@/app/consts/client";
 import { getContract } from "thirdweb";
 import { stakingABI } from "./stakingABI";
+import { voteABI } from "./voteABI";
 
 const nftContractAddress = "0x214cDD4C76Aa2A632Cc64AF522326f2a1f191908";
 const rewardTokenContractAddress = "0x7DFECBf3bf20eA5B1fAce4f6936be71be130Bd56";
@@ -31,4 +32,5 @@ export const VOTING_CONTRACT = getContract({
   client: client,
   chain: base,
   address: votingContractAddress,
+  abi: voteABI,
 });
