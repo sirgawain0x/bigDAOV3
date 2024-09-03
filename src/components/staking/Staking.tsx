@@ -39,9 +39,7 @@ export const Staking = () => {
         }}
       >
         <div className="flex flex-row items-center justify-between w-full p-2">
-          <p style={{ marginRight: "20px", color: "#FFF" }}>
-            Claim a Ticket to Stake.
-          </p>
+          <p style={{ marginRight: "20px", color: "#FFF" }}>Claim a Ticket.</p>
           <TransactionButton
             style={{
               fontSize: "12px",
@@ -72,7 +70,7 @@ export const Staking = () => {
               toast("Transaction error");
             }}
           >
-            Claim Ticket
+            Claim to Stake
           </TransactionButton>
         </div>
         <hr
@@ -83,7 +81,7 @@ export const Staking = () => {
         />
         <div className="p-2 w-full">
           <h2 style={{ color: "#FFF" }}>Owned Tickets</h2>
-          <div className="flex flex-row items-center justify-between w-full mx-auto">
+          <div className="flex flex-col items-center justify-center w-full mx-auto">
             {ownedNFTs ? (
               ownedNFTs
                 .filter((nft: NFT) => !stakedInfo?.[0]?.includes(nft.id)) // Filter out staked NFTs
@@ -107,7 +105,7 @@ export const Staking = () => {
           }}
         />
         <div className="p-2 w-full">
-          <h2 style={{ color: "#FFF" }}>Staked NFTs</h2>
+          <h2 style={{ color: "#FFF" }}>Staked Tickets</h2>
           <div
             style={{
               display: "flex",
