@@ -4,57 +4,26 @@ import {
   useActiveAccount,
   useReadContract,
 } from "thirdweb/react";
+import { getOwnedNFTs } from "thirdweb/extensions/erc721";
 import { StakeRewards } from "./StakeRewards";
 import { NFT_CONTRACT, STAKING_CONTRACT } from "@/lib/contracts";
 import { NFT } from "thirdweb";
-import { useEffect, useState, useCallback } from "react";
-import {
-  claimTo,
-  getNFTs,
-  ownerOf,
-  totalSupply,
-} from "thirdweb/extensions/erc721";
+import { claimTo } from "thirdweb/extensions/erc721";
 import { NFTCard } from "./NFTCard";
 import { StakedNFTCard } from "./StakedNFTCard";
 import { toast } from "sonner";
 
 export const Staking = () => {
   const account = useActiveAccount();
-  const [ownedNFTs, setOwnedNFTs] = useState<NFT[]>([]);
 
-  const getOwnedNFTs = useCallback(async () => {
-    let ownedNFTs: NFT[] = [];
-
-    const totalNFTSupply = await totalSupply({
-      contract: NFT_CONTRACT,
-    });
-    const nfts = await getNFTs({
-      contract: NFT_CONTRACT,
-      start: 0,
-      count: parseInt(totalNFTSupply.toString()),
-    });
-
-    for (let nft of nfts) {
-      const owner = await ownerOf({
-        contract: NFT_CONTRACT,
-        tokenId: nft.id,
-      });
-      if (owner === account?.address) {
-        ownedNFTs.push(nft);
-      }
-    }
-    setOwnedNFTs(ownedNFTs);
-  }, [account?.address]);
-
-  useEffect(() => {
-    const getOwnedNFTs = async () => {
-      // existing code here
-    };
-
-    if (account) {
-      getOwnedNFTs();
-    }
-  }, [account, getOwnedNFTs]);
+  const {
+    data: ownedNFTs,
+    isLoading: ownedNFTsLoading,
+    refetch: refetchOwnedNFTs,
+  } = useReadContract(getOwnedNFTs, {
+    contract: NFT_CONTRACT,
+    owner: account?.address || "",
+  });
 
   const { data: stakedInfo, refetch: refetchStakedInfo } = useReadContract({
     contract: STAKING_CONTRACT,
@@ -75,6 +44,13 @@ export const Staking = () => {
             Claim to Stake 👉🏽
           </h2>
           <TransactionButton
+            style={{
+              fontSize: "12px",
+              backgroundColor: "#333",
+              color: "#fff",
+              padding: "10px 20px",
+              borderRadius: "10px",
+            }}
             transaction={() =>
               claimTo({
                 contract: NFT_CONTRACT,
@@ -82,17 +58,19 @@ export const Staking = () => {
                 quantity: BigInt(1),
               })
             }
-            onTransactionConfirmed={() => {
-              alert("NFT claimed!");
-              toast("NFT claimed!");
-              getOwnedNFTs();
+            onTransactionSent={(result) => {
+              console.log("Claiming a ticket...", result.transactionHash);
+              toast("Claiming a ticket...");
             }}
-            style={{
-              fontSize: "12px",
-              backgroundColor: "#333",
-              color: "#fff",
-              padding: "10px 20px",
-              borderRadius: "10px",
+            onTransactionConfirmed={(receipt) => {
+              console.log("Ticket claimed!", receipt.transactionHash);
+              toast("Ticket claimed!");
+              refetchStakedInfo(); // Refetch staked info after claiming
+              refetchOwnedNFTs(); // Refetch owned NFTs after claiming
+            }}
+            onError={(error) => {
+              console.error("Transaction error", error);
+              toast("Transaction error");
             }}
           >
             Claim Ticket
@@ -114,17 +92,19 @@ export const Staking = () => {
               width: "500px",
             }}
           >
-            {ownedNFTs && ownedNFTs.length > 0 ? (
-              ownedNFTs.map((nft) => (
-                <NFTCard
-                  key={nft.id}
-                  nft={nft}
-                  refetch={getOwnedNFTs}
-                  refecthStakedInfo={refetchStakedInfo}
-                />
-              ))
+            {ownedNFTs ? (
+              ownedNFTs
+                .filter((nft: NFT) => !stakedInfo?.[0]?.includes(nft.id)) // Filter out staked NFTs
+                .map((nft: NFT) => (
+                  <NFTCard
+                    key={nft.id}
+                    nft={nft}
+                    refetchOwnedNFTs={refetchOwnedNFTs}
+                    refetchStakedInfo={refetchStakedInfo}
+                  />
+                ))
             ) : (
-              <p style={{ color: "#FFF" }}>You own 0 Tickets</p>
+              <p style={{ color: "#FFF" }}>You own 0 Tickets.</p>
             )}
           </div>
         </div>
@@ -150,24 +130,19 @@ export const Staking = () => {
                   key={index}
                   tokenId={nft}
                   refetchStakedInfo={refetchStakedInfo}
-                  refetchOwnedNFTs={getOwnedNFTs}
+                  refetchOwnedNFTs={refetchOwnedNFTs}
                 />
               ))
             ) : (
               <p style={{ margin: "20px", color: "#FFF" }}>
-                No ticket&apos;s staked
+                You have no staked NFTs.
               </p>
             )}
           </div>
         </div>
-        <hr
-          style={{
-            width: "100%",
-            border: "1px solid #333",
-          }}
-        />
-        <StakeRewards />
       </div>
     );
   }
+
+  return <p style={{ color: "#FFF" }}>Connect your wallet to stake NFTs.</p>;
 };

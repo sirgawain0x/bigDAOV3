@@ -7,6 +7,7 @@ import { NFT_CONTRACT, STAKING_CONTRACT } from "@/lib/contracts";
 import { getNFT } from "thirdweb/extensions/erc721";
 import { client } from "@/app/consts/client";
 import { prepareContractCall } from "thirdweb";
+import { toast } from "sonner";
 
 type StakedNFTCardProps = {
   tokenId: bigint;
@@ -40,18 +41,6 @@ export const StakedNFTCard: React.FC<StakedNFTCardProps> = ({
         {nft?.metadata.name}
       </p>
       <TransactionButton
-        transaction={() =>
-          prepareContractCall({
-            contract: STAKING_CONTRACT,
-            method: "withdraw",
-            params: [[tokenId]],
-          })
-        }
-        onTransactionConfirmed={() => {
-          refetchOwnedNFTs();
-          refetchStakedInfo();
-          alert("Ticket has been withdrawn!");
-        }}
         style={{
           border: "none",
           backgroundColor: "#333",
@@ -61,6 +50,27 @@ export const StakedNFTCard: React.FC<StakedNFTCardProps> = ({
           cursor: "pointer",
           width: "100%",
           fontSize: "12px",
+        }}
+        transaction={() =>
+          prepareContractCall({
+            contract: STAKING_CONTRACT,
+            method: "withdraw",
+            params: [[tokenId]],
+          })
+        }
+        onTransactionSent={(result) => {
+          console.log("Withdrawing ticket...", result.transactionHash);
+          toast("Withdrawing ticket...");
+        }}
+        onTransactionConfirmed={(receipt) => {
+          console.log("Ticket has been withdrawn!", receipt.transactionHash);
+          refetchOwnedNFTs();
+          refetchStakedInfo();
+          toast("Your ticket has been withdrawn!");
+        }}
+        onError={(error) => {
+          console.error("Transaction error", error);
+          toast("Transaction error");
         }}
       >
         Withdraw
