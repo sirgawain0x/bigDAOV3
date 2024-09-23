@@ -1,6 +1,7 @@
 import { Staking } from "@/components/staking/Staking";
+import { NextPage } from "next";
 
-export default function StakePage() {
+const StakePage: NextPage = () => {
   return (
     <div className="flex flex-col min-h-screen items-center justify-center overflow-x-hidden">
       <header className="flex flex-col items-center justify-center w-full py-4">
@@ -13,4 +14,6 @@ export default function StakePage() {
       </main>
     </div>
   );
-}
+};
+
+export default StakePage;
