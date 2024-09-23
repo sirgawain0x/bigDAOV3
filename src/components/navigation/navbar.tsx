@@ -93,6 +93,16 @@ const Navbar = () => {
                         </Link>
                       </NavigationMenuItem>
                       <NavigationMenuItem>
+                        <Link href="/dex-page" legacyBehavior passHref>
+                          <NavigationMenuLink
+                            className={navigationMenuTriggerStyle()}
+                            onClick={handleLinkClick}
+                          >
+                            Exchange
+                          </NavigationMenuLink>
+                        </Link>
+                      </NavigationMenuItem>
+                      <NavigationMenuItem>
                         <Link href="/voting-page" legacyBehavior passHref>
                           <NavigationMenuLink
                             className={navigationMenuTriggerStyle()}
@@ -141,6 +151,15 @@ const Navbar = () => {
                         className={navigationMenuTriggerStyle()}
                       >
                         Stake
+                      </NavigationMenuLink>
+                    </Link>
+                  </NavigationMenuItem>
+                  <NavigationMenuItem>
+                    <Link href="/dex-page" legacyBehavior passHref>
+                      <NavigationMenuLink
+                        className={navigationMenuTriggerStyle()}
+                      >
+                        Exchange
                       </NavigationMenuLink>
                     </Link>
                   </NavigationMenuItem>

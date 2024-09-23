@@ -80,9 +80,9 @@ export const Staking = () => {
           }}
         />
         <div className="p-2 w-full">
-          <h2 style={{ color: "#FFF" }}>Owned Tickets</h2>
+          <h1 className="text-2xl text-white">Tickets I Own</h1>
           <div className="flex flex-col items-center justify-center w-full mx-auto">
-            {ownedNFTs ? (
+            {ownedNFTs && ownedNFTs.length > 0 ? (
               ownedNFTs
                 .filter((nft: NFT) => !stakedInfo?.[0]?.includes(nft.id)) // Filter out staked NFTs
                 .map((nft: NFT) => (
@@ -94,7 +94,9 @@ export const Staking = () => {
                   />
                 ))
             ) : (
-              <p style={{ color: "#FFF" }}>You own 0 Tickets.</p>
+              <p style={{ margin: "20px", color: "#FFF" }}>
+                You own 0 Tickets.
+              </p>
             )}
           </div>
         </div>
@@ -105,14 +107,15 @@ export const Staking = () => {
           }}
         />
         <div className="p-2 w-full">
-          <h2 style={{ color: "#FFF" }}>Staked Tickets</h2>
+          <h1 className="text-2xl text-white">My Staked Tickets</h1>
           <div
-            style={{
-              display: "flex",
-              flexDirection: "row",
-              flexWrap: "wrap",
-              width: "500px",
-            }}
+            className="flex flex-col items-center justify-center w-full mx-auto"
+            // style={{
+            //   display: "flex",
+            //   flexDirection: "row",
+            //   flexWrap: "wrap",
+            //   width: "500px",
+            // }}
           >
             {stakedInfo && stakedInfo[0].length > 0 ? (
               stakedInfo[0].map((nft: any, index: number) => (
