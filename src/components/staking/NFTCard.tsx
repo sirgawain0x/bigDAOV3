@@ -32,9 +32,7 @@ export const NFTCard = ({
           width: "200px",
         }}
       />
-      <p style={{ margin: "0 10px 10px 10px", color: "#FFF" }}>
-        {nft.metadata.name}
-      </p>
+      <p style={{ margin: "0 10px 10px 10px" }}>{nft.metadata.name}</p>
       <button
         onClick={() => setIsModalOpen(true)}
         style={{
@@ -47,7 +45,7 @@ export const NFTCard = ({
           width: "100%",
         }}
       >
-        Stake
+        Earn
       </button>
       {isModalOpen && (
         <div
@@ -61,6 +59,7 @@ export const NFTCard = ({
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
+            zIndex: 1000,
           }}
         >
           <div
@@ -130,8 +129,8 @@ export const NFTCard = ({
                   })
                 }
                 onTransactionConfirmed={(receipt) => {
-                  toast("Your ticket is staked!");
-                  console.log("Ticket staked!", receipt.transactionHash);
+                  toast("Your asset is staked!");
+                  console.log("Asset staked!", receipt.transactionHash);
                   setIsModalOpen(false);
                   refetchOwnedNFTs();
                   refetchStakedInfo();
@@ -140,7 +139,7 @@ export const NFTCard = ({
                   width: "100%",
                 }}
               >
-                Stake it
+                Earn Yield
               </TransactionButton>
             )}
           </div>

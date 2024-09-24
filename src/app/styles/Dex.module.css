@@ -109,7 +109,7 @@
 .card:focus,
 .card:active {
   background-color: #272c34;
-  opacity: 80%;
+  opacity: 90%;
 }
 
 .card h2 {
@@ -222,7 +222,7 @@
   margin: -17px auto;
   justify-content: center;
   align-items: center;
-  z-index: 99;
+  z-index: 9;
   position: relative;
   display: block;
 }

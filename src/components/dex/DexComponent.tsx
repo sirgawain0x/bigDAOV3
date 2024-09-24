@@ -209,7 +209,7 @@ export const DexComponent = () => {
             backgroundColor: "#111",
             padding: "2rem",
             borderRadius: "10px",
-            minWidth: "500px",
+            minWidth: "440px",
           }}
         >
           <div>

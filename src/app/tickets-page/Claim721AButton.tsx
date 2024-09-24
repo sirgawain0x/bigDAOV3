@@ -34,9 +34,9 @@ function Claim721AButton() {
     <div className="mx-auto">
       <div className="flex flex-row my-2">
         {activeAccount ? (
-          <p className="mx-auto">You have {nftOwned} tickets</p>
+          <p className="mx-auto">You have {nftOwned} assets.</p>
         ) : (
-          <p className="mx-auto">Connect to claim a ticket.</p>
+          <p className="mx-auto">Connect to claim an asset.</p>
         )}
       </div>
 
@@ -62,7 +62,7 @@ function Claim721AButton() {
           toast("Transaction error");
         }}
       >
-        Claim Ticket
+        Claim Asset
       </TransactionButton>
     </div>
   );

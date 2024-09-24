@@ -78,7 +78,7 @@ const Navbar = () => {
                             className={navigationMenuTriggerStyle()}
                             onClick={handleLinkClick}
                           >
-                            Tickets
+                            Assets
                           </NavigationMenuLink>
                         </Link>
                       </NavigationMenuItem>
@@ -88,7 +88,7 @@ const Navbar = () => {
                             className={navigationMenuTriggerStyle()}
                             onClick={handleLinkClick}
                           >
-                            Stake
+                            Earn Vault
                           </NavigationMenuLink>
                         </Link>
                       </NavigationMenuItem>
@@ -98,7 +98,7 @@ const Navbar = () => {
                             className={navigationMenuTriggerStyle()}
                             onClick={handleLinkClick}
                           >
-                            Exchange
+                            Swap
                           </NavigationMenuLink>
                         </Link>
                       </NavigationMenuItem>
@@ -141,7 +141,7 @@ const Navbar = () => {
                       <NavigationMenuLink
                         className={navigationMenuTriggerStyle()}
                       >
-                        Tickets
+                        Assets
                       </NavigationMenuLink>
                     </Link>
                   </NavigationMenuItem>
@@ -150,7 +150,7 @@ const Navbar = () => {
                       <NavigationMenuLink
                         className={navigationMenuTriggerStyle()}
                       >
-                        Stake
+                        Earn Vault
                       </NavigationMenuLink>
                     </Link>
                   </NavigationMenuItem>
@@ -159,7 +159,7 @@ const Navbar = () => {
                       <NavigationMenuLink
                         className={navigationMenuTriggerStyle()}
                       >
-                        Exchange
+                        Swap
                       </NavigationMenuLink>
                     </Link>
                   </NavigationMenuItem>
