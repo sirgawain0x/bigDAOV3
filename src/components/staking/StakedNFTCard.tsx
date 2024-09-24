@@ -37,9 +37,7 @@ export const StakedNFTCard: React.FC<StakedNFTCardProps> = ({
           width: "200px",
         }}
       />
-      <p style={{ margin: "0 10px 10px 10px", color: "#FFF" }}>
-        {nft?.metadata.name}
-      </p>
+      <p style={{ margin: "0 10px 10px 10px" }}>{nft?.metadata.name}</p>
       <TransactionButton
         style={{
           border: "none",
@@ -49,7 +47,6 @@ export const StakedNFTCard: React.FC<StakedNFTCardProps> = ({
           borderRadius: "10px",
           cursor: "pointer",
           width: "100%",
-          fontSize: "12px",
         }}
         transaction={() =>
           prepareContractCall({
@@ -59,14 +56,14 @@ export const StakedNFTCard: React.FC<StakedNFTCardProps> = ({
           })
         }
         onTransactionSent={(result) => {
-          console.log("Withdrawing ticket...", result.transactionHash);
-          toast("Withdrawing ticket...");
+          console.log("Withdrawing asset...", result.transactionHash);
+          toast("Withdrawing asset...");
         }}
         onTransactionConfirmed={(receipt) => {
-          console.log("Ticket has been withdrawn!", receipt.transactionHash);
+          console.log("Asset has been withdrawn!", receipt.transactionHash);
           refetchOwnedNFTs();
           refetchStakedInfo();
-          toast("Your ticket has been withdrawn!");
+          toast("Your asset has been withdrawn!");
         }}
         onError={(error) => {
           console.error("Transaction error", error);

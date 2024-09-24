@@ -20,7 +20,9 @@ export const TicketContent = () => {
 
   return (
     <div className="flex flex-col items-center justify-center w-full">
-      {!nftLoading && firstNFT && <NFTCard nft={firstNFT} />}
+      <div className="max-w-lg mx-auto">
+        {!nftLoading && firstNFT && <NFTCard nft={firstNFT} />}
+      </div>
       <div className="max-w-lg mx-auto">
         <PayEmbed
           client={client}

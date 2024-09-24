@@ -1,4 +1,5 @@
 "use client";
+import { useState } from "react";
 import {
   TransactionButton,
   useActiveAccount,
@@ -11,9 +12,18 @@ import { claimTo } from "thirdweb/extensions/erc721";
 import { NFTCard } from "./NFTCard";
 import { StakedNFTCard } from "./StakedNFTCard";
 import { toast } from "sonner";
+import { Button } from "@/components/ui/button";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible";
+import { ChevronDown, Plus, X } from "lucide-react";
 
 export const Staking = () => {
   const account = useActiveAccount();
+  const [isOpen, setIsOpen] = useState(false);
+  const [isEarnOpen, setIsEarnOpen] = useState(false);
 
   const {
     data: ownedNFTs,
@@ -32,14 +42,9 @@ export const Staking = () => {
 
   if (account) {
     return (
-      <div
-        className="flex flex-col items-center justify-center border rounded-lg w-10/12"
-        style={{
-          backgroundColor: "#151515",
-        }}
-      >
+      <div>
         <div className="flex flex-row items-center justify-between w-full p-2">
-          <p style={{ marginRight: "20px", color: "#FFF" }}>Claim a Ticket.</p>
+          <p style={{ marginRight: "20px" }}>Buy an Asset.</p>
           <TransactionButton
             style={{
               fontSize: "12px",
@@ -56,12 +61,12 @@ export const Staking = () => {
               })
             }
             onTransactionSent={(result) => {
-              console.log("Claiming a ticket...", result.transactionHash);
-              toast("Claiming a ticket...");
+              console.log("Claiming an asset...", result.transactionHash);
+              toast("Claiming an asset...");
             }}
             onTransactionConfirmed={(receipt) => {
-              console.log("Ticket claimed!", receipt.transactionHash);
-              toast("Ticket claimed!");
+              console.log("Asset claimed!", receipt.transactionHash);
+              toast("Asset claimed!");
               refetchStakedInfo(); // Refetch staked info after claiming
               refetchOwnedNFTs(); // Refetch owned NFTs after claiming
             }}
@@ -70,7 +75,7 @@ export const Staking = () => {
               toast("Transaction error");
             }}
           >
-            Claim to Stake
+            Buy to Earn
           </TransactionButton>
         </div>
         <hr
@@ -79,63 +84,80 @@ export const Staking = () => {
             border: "1px solid #333",
           }}
         />
-        <div className="p-2 w-full">
-          <h1 className="text-2xl text-white">Tickets I Own</h1>
-          <div className="flex flex-col items-center justify-center w-full mx-auto">
-            {ownedNFTs && ownedNFTs.length > 0 ? (
-              ownedNFTs
-                .filter((nft: NFT) => !stakedInfo?.[0]?.includes(nft.id)) // Filter out staked NFTs
-                .map((nft: NFT) => (
-                  <NFTCard
-                    key={nft.id}
-                    nft={nft}
-                    refetchOwnedNFTs={refetchOwnedNFTs}
-                    refetchStakedInfo={refetchStakedInfo}
-                  />
-                ))
-            ) : (
-              <p style={{ margin: "20px", color: "#FFF" }}>
-                You own 0 Tickets.
-              </p>
-            )}
-          </div>
-        </div>
-        <hr
-          style={{
-            width: "100%",
-            border: "1px solid #333",
-          }}
-        />
-        <div className="p-2 w-full">
-          <h1 className="text-2xl text-white">My Staked Tickets</h1>
-          <div
-            className="flex flex-col items-center justify-center w-full mx-auto"
-            // style={{
-            //   display: "flex",
-            //   flexDirection: "row",
-            //   flexWrap: "wrap",
-            //   width: "500px",
-            // }}
-          >
-            {stakedInfo && stakedInfo[0].length > 0 ? (
-              stakedInfo[0].map((nft: any, index: number) => (
-                <StakedNFTCard
-                  key={index}
-                  tokenId={nft}
-                  refetchStakedInfo={refetchStakedInfo}
-                  refetchOwnedNFTs={refetchOwnedNFTs}
-                />
-              ))
-            ) : (
-              <p style={{ margin: "20px", color: "#FFF" }}>
-                You have no staked NFTs.
-              </p>
-            )}
-          </div>
+
+        {/* New two-column layout */}
+        <div className="flex flex-row w-full">
+          {/* Left column: Tickets I Own */}
+          <Collapsible open={isOpen} onOpenChange={setIsOpen}>
+            <div className="w-60 p-2 cursor-pointer">
+              <CollapsibleTrigger asChild>
+                <div className="flex flex-row items-center justify-between">
+                  <h1 className="text-lg">
+                    ({ownedNFTs?.length.toString()}) Assets In Wallet
+                  </h1>
+                  <ChevronDown className="h-4 w-4" />
+                </div>
+              </CollapsibleTrigger>
+              <CollapsibleContent>
+                <div className="flex flex-col items-center justify-center">
+                  {ownedNFTs && ownedNFTs.length > 0 ? (
+                    ownedNFTs
+                      .filter((nft: NFT) => !stakedInfo?.[0]?.includes(nft.id)) // Filter out staked NFTs
+                      .map((nft: NFT) => (
+                        <NFTCard
+                          key={nft.id}
+                          nft={nft}
+                          refetchOwnedNFTs={refetchOwnedNFTs}
+                          refetchStakedInfo={refetchStakedInfo}
+                        />
+                      ))
+                  ) : (
+                    <p style={{ margin: "20px" }}>You own 0 Assets.</p>
+                  )}
+                </div>
+              </CollapsibleContent>
+            </div>
+          </Collapsible>
+
+          {/* Right column: My Staked Tickets */}
+          <Collapsible open={isEarnOpen} onOpenChange={setIsEarnOpen}>
+            <div className="w-60 p-2 cursor-pointer">
+              <CollapsibleTrigger asChild>
+                <div className="flex flex-row items-center justify-between">
+                  <h1 className="text-lg">
+                    ({stakedInfo?.[0]?.length.toString()}) Assets In Earn Vault
+                  </h1>
+                  <ChevronDown className="h-4 w-4" />
+                </div>
+              </CollapsibleTrigger>
+              <CollapsibleContent>
+                <div className="flex flex-col items-center justify-center w-full mx-auto">
+                  {stakedInfo && stakedInfo[0].length > 0 ? (
+                    stakedInfo[0].map((nft: any, index: number) => (
+                      <StakedNFTCard
+                        key={index}
+                        tokenId={nft}
+                        refetchStakedInfo={refetchStakedInfo}
+                        refetchOwnedNFTs={refetchOwnedNFTs}
+                      />
+                    ))
+                  ) : (
+                    <p style={{ margin: "20px" }}>
+                      You have no assets earning yield.
+                    </p>
+                  )}
+                </div>
+              </CollapsibleContent>
+            </div>
+          </Collapsible>
         </div>
       </div>
     );
   }
 
-  return <p style={{ color: "#FFF" }}>Connect your wallet to stake NFTs.</p>;
+  return (
+    <p style={{ color: "#FFF" }}>
+      Connect your wallet to earn yield on your assets.
+    </p>
+  );
 };
