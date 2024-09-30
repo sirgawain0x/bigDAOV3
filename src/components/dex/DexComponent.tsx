@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
 import { client } from "@/app/consts/client";
 import { base } from "thirdweb/chains";
 import {
@@ -8,63 +8,73 @@ import {
   sendTransaction,
   toWei,
   toEther,
+  Address,
+  toTokens,
+  toUnits,
 } from "thirdweb";
-import { getBalance, getCurrencyMetadata } from "thirdweb/extensions/erc20";
+import { getBalance } from "thirdweb/extensions/erc20";
 import {
   useReadContract,
   useActiveAccount,
   useWalletBalance,
   useSendTransaction,
 } from "thirdweb/react";
+import Token from "@/app/types/token";
+import {
+  DEX_ADDRESS,
+  TOKEN_ADDRESS,
+  REWARD_TOKEN_CONTRACT,
+} from "@/lib/contracts";
 import styles from "@/app/styles/Dex.module.css";
 import SwapInput from "./SwapInput";
 import { Button } from "@/components/ui/button";
 import { ArrowDown, ArrowUp } from "lucide-react";
+import { TransactionButton } from "thirdweb/react";
+import {
+  allowance as thirdwebAllowance,
+  balanceOf,
+} from "thirdweb/extensions/erc20";
+import approve from "@/app/transactions/approve";
 
 export const DexComponent = () => {
-  const TOKEN_ADDRESS = "0x7DFECBf3bf20eA5B1fAce4f6936be71be130Bd56";
-  const DEX_ADDRESS = "0xADC9c9270A394fB84CF28E28D45e2513CEAD35Bb";
+  const fetchAllowance = async (tokenIn: Token, recipient: Address) => {
+    return thirdwebAllowance({
+      contract: getContract({
+        client,
+        chain: base,
+        address: tokenIn.address,
+      }),
+      owner: recipient,
+      spender: DEX_ADDRESS,
+    });
+  };
+
+  const fetchBalance = async (tokenIn: Token, recipient: Address) => {
+    return balanceOf({
+      contract: getContract({
+        client,
+        chain: base,
+        address: tokenIn.address,
+      }),
+      address: recipient,
+    });
+  };
 
   const activeAccount = useActiveAccount();
-
-  const tokenContract = getContract({
-    client,
+  const {
+    data: walletBalance,
+    isLoading: walletBalanceIsLoading,
+    isError: walletBalanceIsError,
+  } = useWalletBalance({
     chain: base,
-    address: TOKEN_ADDRESS,
-  });
-
-  const dexContract = getContract({
+    address: activeAccount?.address,
     client,
-    chain: base,
-    address: DEX_ADDRESS,
   });
-  // Fetch Token Metadata
-  const { data: tokenMetadata, isLoading: tokenMetadataLoading } =
-    useReadContract(getCurrencyMetadata, {
-      contract: tokenContract,
-    });
+  console.log("balance", walletBalance?.displayValue, walletBalance?.symbol);
 
-  // Fetch BIG Token Balance
-  const { data: tokenBalance, isLoading: tokenBalanceLoading } =
-    useReadContract(getBalance, {
-      contract: tokenContract,
-      address: activeAccount?.address || "",
-    });
-
-  // Fetch Native Token Balance
-  const { data: nativeBalance, isLoading: nativeBalanceLoading } =
-    useWalletBalance({
-      client,
-      chain: base,
-      address: activeAccount?.address || "",
-    });
-
-  // Fetch Dex/BIG Balance
-  const { data: contractTokenBalance, isLoading: contractTokenBalanceLoading } =
-    useReadContract(getBalance, {
-      contract: tokenContract,
-      address: DEX_ADDRESS,
-    });
+  const [amount, setAmount] = useState<number>(0);
+  const [inputTokenKey, setInputTokenKey] = useState<string | undefined>();
+  const [outputTokenKey, setOutputTokenKey] = useState<string | undefined>();
 
   const [contractBalance, setContractBalance] = useState<String>("0");
   const [nativeValue, setNativeValue] = useState<String>("0");
@@ -72,134 +82,80 @@ export const DexComponent = () => {
   const [currentForm, setCurrentForm] = useState<String>("native");
   const [isLoading, setIsLoading] = useState<Boolean>(false);
 
-  // Swap Native Token to BIG
-  const { mutateAsync: swapNativeToken } = useSendTransaction();
-
-  // Swap BIG to Native
-  const { mutateAsync: swapBigToNative } = useSendTransaction();
-
-  // Approve Token Spending
-  const { mutateAsync: approveTokenSpending } = useSendTransaction();
-
-  const handleSwapNativeToken = async () => {
-    setIsLoading(true);
-    try {
-      const transaction = prepareContractCall({
-        contract: dexContract,
-        method: "function swapEthToToken() payable",
-        params: [],
-      });
-
-      const tx = await swapNativeToken(transaction);
-      console.log(tx);
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const { data: amountToGet, isPending } = useReadContract({
-    contract: dexContract,
-    method:
-      "function getAmountOfTokens(uint256 inputAmount, uint256 inputReserve, uint256 outputReserve) pure returns (uint256)",
-    params:
-      currentForm === "native"
-        ? [
-            toWei((nativeValue as string) || "0"),
-            toWei((contractBalance as string) || "0"),
-            contractTokenBalance?.value || 0n,
-          ]
-        : [
-            toWei((tokenValue as string) || "0"),
-            contractTokenBalance?.value || 0n,
-            toWei((contractBalance as string) || "0"),
-          ],
-  });
-
-  // Execute the swap
-  // This function will swap the token to native or the native to the token
-  const executeSwap = async () => {
-    setIsLoading(true);
-    try {
-      if (currentForm === "native") {
-        await swapNativeToken({
-          client,
-          chain: base,
-          value: toWei((nativeValue as string) || "0"),
-        });
-        alert("Swap executed successfully");
-      } else {
-        await approveTokenSpending({
-          client,
-          chain: base,
-          value: toWei((nativeValue as string) || "0"),
-        });
-        await swapBigToNative({
-          client,
-          chain: base,
-          value: toWei((tokenValue as string) || "0"),
-        });
-        alert("Swap executed successfully");
-      }
-    } catch (error) {
-      console.error(error);
-      alert("An error occurred while trying to execute the swap");
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const handleSwapBigToNative = async () => {
-    setIsLoading(true);
-    try {
-      const transaction = prepareContractCall({
-        contract: dexContract,
-        method: "function swapTokenToEth(uint256 _tokensSold)",
-        params: [amountToGet || 0n],
-      });
-
-      const tx = await swapBigToNative(transaction);
-
-      console.log(tx);
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
+  // Effect for fetching token balance
   useEffect(() => {
-    const fetchContractBalance = async () => {
-      try {
-        const balance = await getBalance({
-          contract: dexContract,
-          address: DEX_ADDRESS,
-        });
-        setContractBalance(toEther(balance?.value));
-      } catch (error) {
-        console.error("Error fetching contract balance:", error);
+    const fetchTokenBalance = async () => {
+      if (activeAccount?.address && REWARD_TOKEN_CONTRACT) {
+        try {
+          const balance = await getBalance({
+            contract: REWARD_TOKEN_CONTRACT,
+            address: activeAccount.address,
+          });
+          setTokenValue(balance.displayValue);
+        } catch (error) {
+          console.error("Error fetching token balance:", error);
+        }
       }
     };
 
-    // Fetch immediately on component mount
-    fetchContractBalance();
+    fetchTokenBalance();
+  }, [activeAccount?.address, tokenValue]);
 
-    // Set up interval to fetch every 10 seconds
-    const intervalId = setInterval(fetchContractBalance, 10000);
-
-    // Clean up interval on component unmount
-    return () => clearInterval(intervalId);
-  }, [dexContract]);
-
+  // Effect for fetching native balance
   useEffect(() => {
-    if (!amountToGet) return;
-    if (currentForm === "native") {
-      setTokenValue(toEther(amountToGet));
-    } else {
-      setNativeValue(toEther(amountToGet));
+    const fetchNativeBalance = async () => {
+      if (activeAccount?.address && walletBalance) {
+        try {
+          setNativeValue(walletBalance?.displayValue);
+        } catch (error) {
+          console.error("Error fetching native balance:", error);
+        }
+      }
+    };
+
+    fetchNativeBalance();
+  }, [activeAccount?.address, nativeValue, walletBalance]);
+
+  const handleInputChange = useCallback(
+    (value: string, type: "native" | "token") => {
+      if (type === "native") {
+        setNativeValue(value);
+      } else {
+        setTokenValue(value);
+      }
+      // No need to manually trigger refetches here, as the useEffect hooks will handle it
+    },
+    []
+  );
+
+  async function executeSwap() {
+    try {
+      setIsLoading(true);
+
+      // Approve DEX to spend token
+      //await tokenContract.call('approve', [DEX_ADDRESS, tokenAmount]);
+      approve({
+        amount: toWei(tokenValue as string),
+        token: tokenAmount,
+        spender: DEX_ADDRESS,
+      });
+
+      const tx =
+        currentForm === "native"
+          ? await dexContract.call("swapEthToToken", {
+              value: toWei(nativeAmount),
+            })
+          : await dexContract.call("swapTokenToEth", [toWei(tokenAmount)]);
+
+      await tx.wait();
+      alert(`Swap successful!`);
+    } catch (err) {
+      console.error(err);
+      alert("An error occurred");
+    } finally {
+      setIsLoading(false);
     }
-  }, [amountToGet, currentForm]);
+  }
 
   return (
     <main className={styles.main}>
@@ -216,11 +172,11 @@ export const DexComponent = () => {
             <SwapInput
               current={currentForm as string}
               type="native"
-              max={nativeBalance?.displayValue}
+              max={nativeValue as string}
               value={nativeValue as string}
-              setValue={setNativeValue}
+              setValue={(value) => handleInputChange(value, "native")}
               tokenSymbol="ETH"
-              tokenBalance={nativeBalance?.displayValue}
+              tokenBalance={nativeValue as string}
             />
             <Button
               onClick={() =>
@@ -239,11 +195,11 @@ export const DexComponent = () => {
             <SwapInput
               current={currentForm as string}
               type="token"
-              max={tokenBalance?.displayValue}
+              max={tokenValue as string}
               value={tokenValue as string}
-              setValue={setTokenValue}
-              tokenSymbol={tokenMetadata?.symbol as string}
-              tokenBalance={tokenBalance?.displayValue}
+              setValue={(value) => handleInputChange(value, "token")}
+              tokenSymbol="BIG"
+              tokenBalance={tokenValue as string}
             />
           </div>
           {activeAccount?.address ? (
