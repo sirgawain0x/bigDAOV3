@@ -3,6 +3,7 @@ import { ConnectButton } from "thirdweb/react";
 import { client } from "./client";
 import { base } from "thirdweb/chains";
 import { createWallet, inAppWallet } from "thirdweb/wallets";
+import { FACTORY_CONTRACT } from "@/lib/contracts";
 
 const wallets = [
   inAppWallet(),
@@ -15,7 +16,7 @@ export const LoginButton = () => {
   return (
     <ConnectButton
       accountAbstraction={{
-        factoryAddress: "0xE90DebFD907F5B655f22bfC16083E45994d708bE",
+        factoryAddress: FACTORY_CONTRACT,
         chain: base,
         sponsorGas: false,
       }}
