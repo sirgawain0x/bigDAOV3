@@ -31,12 +31,13 @@ export default function SwapInput({
   return (
     <div className={styles.swapInputContainer}>
       <input
-        type="number"
+        type="number" // Keep input type as number
         placeholder="0.0"
         value={value}
-        onChange={(e) => setValue(e.target.value)}
+        onChange={(e) => setValue(e.target.value)} // Handle input change
         disabled={current !== type}
         className={styles.swapInput}
+        step="any" // Allow decimal input
       />
       <div
         style={{
