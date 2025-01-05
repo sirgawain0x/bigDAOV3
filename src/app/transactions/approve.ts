@@ -6,19 +6,20 @@ import { approve as thirdwebApprove } from "thirdweb/extensions/erc20";
 
 type ApproveOptions = {
   token: Token;
-  amount: bigint;
+  amount: bigint; // Ensure this is a bigint
   spender: Address;
 };
 
-export default function approve(options: ApproveOptions) {
+export default async function approve(options: ApproveOptions) {
   const contract = getContract({
     address: options.token.address as Address,
     chain: base,
   });
 
-  return thirdwebApprove({
+  // Ensure amount is passed as a bigint
+  return await thirdwebApprove({
     contract,
     spender: options.spender,
-    amountWei: options.amount,
+    amountWei: options.amount, // Ensure this is a bigint
   });
 }
