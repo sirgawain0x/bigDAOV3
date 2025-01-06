@@ -21,87 +21,39 @@ export const NFTCard = ({
   const [isApproved, setIsApproved] = useState(false);
 
   return (
-    <div style={{ margin: "10px" }}>
+    <div className="flex flex-col items-center w-full max-w-[200px] mx-auto">
       <MediaRenderer
         client={client}
         src={nft.metadata.image}
-        style={{
-          borderRadius: "10px",
-          marginBottom: "10px",
-          height: "200px",
-          width: "200px",
-        }}
+        className="rounded-lg mb-4 h-[200px] w-[200px] object-cover"
       />
-      <p style={{ margin: "0 10px 10px 10px" }}>{nft.metadata.name}</p>
+      <p className="text-center mb-4">{nft.metadata.name}</p>
       <button
         onClick={() => setIsModalOpen(true)}
-        style={{
-          border: "none",
-          backgroundColor: "#333",
-          color: "#fff",
-          padding: "10px",
-          borderRadius: "10px",
-          cursor: "pointer",
-          width: "100%",
-        }}
+        className="w-full px-4 py-2 text-sm font-medium text-white bg-primary hover:bg-primary/40 rounded-lg transition-colors"
       >
         Earn
       </button>
       {isModalOpen && (
         <div
-          style={{
-            position: "fixed",
-            top: 0,
-            left: 0,
-            width: "100%",
-            height: "100%",
-            backgroundColor: "rgba(0, 0, 0, 0.5)",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            zIndex: 1000,
-          }}
+          className="fixed top-0 left-0 w-full h-full bg-black/50 flex justify-center items-center z-1000"
         >
           <div
-            style={{
-              minWidth: "300px",
-              backgroundColor: "#222",
-              padding: "20px",
-              borderRadius: "10px",
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-            }}
+            className="min-w-[300px] bg-[#222] p-4 rounded-lg flex flex-col items-center"
           >
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "flex-end",
-                width: "100%",
-              }}
-            >
+            <div className="flex justify-end w-full">
               <button
                 onClick={() => setIsModalOpen(false)}
-                style={{
-                  border: "none",
-                  backgroundColor: "transparent",
-                  color: "#fff",
-                  cursor: "pointer",
-                }}
+                className="border-none bg-transparent text-white cursor-pointer"
               >
                 Close
               </button>
             </div>
-            <h3 style={{ margin: "10px 0", color: "#fff" }}>
-              You&apos;re about to stake:
-            </h3>
+            <h3 className="mb-4 text-white">You&apos;re about to stake:</h3>
             <MediaRenderer
               client={client}
               src={nft.metadata.image}
-              style={{
-                borderRadius: "10px",
-                marginBottom: "10px",
-              }}
+              className="rounded-lg mb-4"
             />
             {!isApproved ? (
               <TransactionButton
@@ -112,9 +64,7 @@ export const NFTCard = ({
                     tokenId: nft.id,
                   })
                 }
-                style={{
-                  width: "100%",
-                }}
+                className="w-full"
                 onTransactionConfirmed={() => setIsApproved(true)}
               >
                 Approve
@@ -135,9 +85,7 @@ export const NFTCard = ({
                   refetchOwnedNFTs();
                   refetchStakedInfo();
                 }}
-                style={{
-                  width: "100%",
-                }}
+                className="w-full"
               >
                 Earn Yield
               </TransactionButton>

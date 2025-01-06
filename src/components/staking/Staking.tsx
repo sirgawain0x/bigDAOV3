@@ -43,16 +43,10 @@ export const Staking = () => {
   if (account) {
     return (
       <div>
-        <div className="flex flex-row items-center justify-between w-full p-2">
-          <p style={{ marginRight: "20px" }}>Buy an Asset.</p>
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between w-full p-4 space-y-4 sm:space-y-0">
+          <p className="text-lg sm:text-xl font-medium">Buy an Asset</p>
           <TransactionButton
-            style={{
-              fontSize: "12px",
-              backgroundColor: "#333",
-              color: "#fff",
-              padding: "10px 20px",
-              borderRadius: "10px",
-            }}
+            className="w-full sm:w-auto px-4 py-2 text-sm font-medium text-white bg-primary hover:bg-primary/40 rounded-lg transition-colors"
             transaction={() =>
               claimTo({
                 contract: NFT_CONTRACT,
@@ -67,8 +61,8 @@ export const Staking = () => {
             onTransactionConfirmed={(receipt) => {
               console.log("Asset claimed!", receipt.transactionHash);
               toast("Asset claimed!");
-              refetchStakedInfo(); // Refetch staked info after claiming
-              refetchOwnedNFTs(); // Refetch owned NFTs after claiming
+              refetchStakedInfo();
+              refetchOwnedNFTs();
             }}
             onError={(error) => {
               console.error("Transaction error", error);
@@ -78,77 +72,85 @@ export const Staking = () => {
             Buy to Earn
           </TransactionButton>
         </div>
-        <hr
-          style={{
-            width: "100%",
-            border: "1px solid #333",
-          }}
-        />
+        <hr className="w-full border-t border-border my-4" />
 
-        {/* New two-column layout */}
-        <div className="flex flex-row w-full">
-          {/* Left column: Tickets I Own */}
-          <Collapsible open={isOpen} onOpenChange={setIsOpen}>
-            <div className="w-60 p-2 cursor-pointer">
-              <CollapsibleTrigger asChild>
-                <div className="flex flex-row items-center justify-between">
-                  <h1 className="text-lg">
-                    ({ownedNFTs?.length.toString()}) Assets In Wallet
-                  </h1>
-                  <ChevronDown className="h-4 w-4" />
-                </div>
-              </CollapsibleTrigger>
-              <CollapsibleContent>
-                <div className="flex flex-col items-center justify-center">
-                  {ownedNFTs && ownedNFTs.length > 0 ? (
-                    ownedNFTs
-                      .filter((nft: NFT) => !stakedInfo?.[0]?.includes(nft.id)) // Filter out staked NFTs
-                      .map((nft: NFT) => (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 p-4">
+          {/* Left column: Owned Assets */}
+          <Collapsible
+            open={isOpen}
+            onOpenChange={setIsOpen}
+            className="w-full"
+          >
+            <CollapsibleTrigger asChild>
+              <div className="flex items-center justify-between p-4 bg-background/50 rounded-lg cursor-pointer hover:bg-background/60 transition-colors">
+                <h2 className="text-lg font-semibold">
+                  ({ownedNFTs?.length.toString()}) Assets In Wallet
+                </h2>
+                <ChevronDown
+                  className="h-5 w-5 transition-transform duration-200"
+                  style={{
+                    transform: isOpen ? "rotate(180deg)" : "rotate(0deg)",
+                  }}
+                />
+              </div>
+            </CollapsibleTrigger>
+            <CollapsibleContent className="mt-4 space-y-4">
+              <div className="flex flex-col items-center justify-center w-full gap-4">
+                {ownedNFTs && ownedNFTs.length > 0 ? (
+                  ownedNFTs
+                    .filter((nft: NFT) => !stakedInfo?.[0]?.includes(nft.id)) // Filter out staked NFTs
+                    .map((nft: NFT) => (
+                      <div key={nft.id} className="w-full max-w-sm mx-auto">
                         <NFTCard
-                          key={nft.id}
                           nft={nft}
                           refetchOwnedNFTs={refetchOwnedNFTs}
                           refetchStakedInfo={refetchStakedInfo}
                         />
-                      ))
-                  ) : (
-                    <p style={{ margin: "20px" }}>You own 0 Assets.</p>
-                  )}
-                </div>
-              </CollapsibleContent>
-            </div>
+                      </div>
+                    ))
+                ) : (
+                  <p className="text-center py-4">You own 0 Assets.</p>
+                )}
+              </div>
+            </CollapsibleContent>
           </Collapsible>
 
           {/* Right column: My Staked Tickets */}
-          <Collapsible open={isEarnOpen} onOpenChange={setIsEarnOpen}>
-            <div className="w-60 p-2 cursor-pointer">
-              <CollapsibleTrigger asChild>
-                <div className="flex flex-row items-center justify-between">
-                  <h1 className="text-lg">
-                    ({stakedInfo?.[0]?.length.toString()}) Assets In Earn Vault
-                  </h1>
-                  <ChevronDown className="h-4 w-4" />
-                </div>
-              </CollapsibleTrigger>
-              <CollapsibleContent>
-                <div className="flex flex-col items-center justify-center w-full mx-auto">
-                  {stakedInfo && stakedInfo[0].length > 0 ? (
-                    stakedInfo[0].map((nft: any, index: number) => (
+          <Collapsible
+            open={isEarnOpen}
+            onOpenChange={setIsEarnOpen}
+            className="w-full"
+          >
+            <CollapsibleTrigger asChild>
+              <div className="flex items-center justify-between p-4 bg-background/50 rounded-lg cursor-pointer hover:bg-background/60 transition-colors">
+                <h2 className="text-lg font-semibold">
+                  ({stakedInfo?.[0]?.length.toString()}) Assets In Earn Vault
+                </h2>
+                <ChevronDown
+                  className="h-5 w-5 transition-transform duration-200"
+                  style={{
+                    transform: isEarnOpen ? "rotate(180deg)" : "rotate(0deg)",
+                  }}
+                />
+              </div>
+            </CollapsibleTrigger>
+            <CollapsibleContent className="mt-4 space-y-4">
+              <div className="flex flex-col items-center justify-center w-full gap-4">
+                {stakedInfo && stakedInfo[0].length > 0 ? (
+                  stakedInfo[0].map((nft: any, index: number) => (
+                    <div key={index} className="w-full max-w-sm mx-auto">
                       <StakedNFTCard
-                        key={index}
                         tokenId={nft}
                         refetchStakedInfo={refetchStakedInfo}
                         refetchOwnedNFTs={refetchOwnedNFTs}
                       />
-                    ))
-                  ) : (
-                    <p style={{ margin: "20px" }}>
-                      You have no assets earning yield.
-                    </p>
-                  )}
-                </div>
-              </CollapsibleContent>
-            </div>
+                    </div>
+                  ))
+                ) : (
+                  <p className="text-center py-4">You have no assets earning yield.</p>
+                )}
+              </div>
+            </CollapsibleContent>
           </Collapsible>
         </div>
       </div>

@@ -26,28 +26,15 @@ export const StakedNFTCard: React.FC<StakedNFTCardProps> = ({
   });
 
   return (
-    <div style={{ margin: "10px" }}>
+    <div className="flex flex-col items-center w-full max-w-[200px] mx-auto">
       <MediaRenderer
         client={client}
         src={nft?.metadata.image}
-        style={{
-          borderRadius: "10px",
-          marginBottom: "10px",
-          height: "200px",
-          width: "200px",
-        }}
+        className="rounded-lg mb-4 h-[200px] w-[200px] object-cover"
       />
-      <p style={{ margin: "0 10px 10px 10px" }}>{nft?.metadata.name}</p>
+      <p className="text-center mb-4">{nft?.metadata.name}</p>
       <TransactionButton
-        style={{
-          border: "none",
-          backgroundColor: "#333",
-          color: "#fff",
-          padding: "10px",
-          borderRadius: "10px",
-          cursor: "pointer",
-          width: "100%",
-        }}
+        className="w-full px-4 py-2 text-sm font-medium text-white bg-primary hover:bg-primary/40 rounded-lg transition-colors"
         transaction={() =>
           prepareContractCall({
             contract: STAKING_CONTRACT,

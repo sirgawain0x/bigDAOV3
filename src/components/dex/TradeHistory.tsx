@@ -33,13 +33,18 @@ export function TradeHistory() {
     try {
       setLoading(true);
 
-      const tradeData: Trade[] = events.map((event) => ({
-        timestamp: Math.floor(Date.now() / 1000), // Current timestamp in seconds
-        hash: event.transactionHash,
-        type: event.args.from === DEX_CONTRACT.address ? "SELL" : "BUY",
-        amount: event.args.value,
-        price: Number(formatEther(event.args.value)),
-      }));
+      const tradeData: Trade[] = events
+        .filter((event) => event.args && 'from' in event.args && 'value' in event.args)
+        .map((event) => {
+          const args = event.args as { from: string; to: string; value: bigint };
+          return {
+            timestamp: Math.floor(Date.now() / 1000),
+            hash: event.transactionHash,
+            type: args.from === DEX_CONTRACT.address ? "SELL" : "BUY",
+            amount: args.value,
+            price: Number(formatEther(args.value)),
+          };
+        });
 
       setTrades(tradeData);
     } catch (error) {
