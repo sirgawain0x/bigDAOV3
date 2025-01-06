@@ -10,6 +10,9 @@ const StakePage: NextPage = () => {
           <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-4 sm:mb-6 text-center">
             Earn Vault Rewards
           </h1>
+          <p className="text-sm sm:text-base lg:text-lg font-medium text-center">
+            Earn rewards by staking your assets.
+          </p>
         </div>
       </header>
       <main className="flex-grow w-full max-w-[1440px] space-y-6 sm:space-y-8 lg:space-y-10">

@@ -5,6 +5,7 @@ import { DataTable } from "@/components/leaderboard/data-table";
 import Image from "next/image";
 import { StackClient } from "@stackso/js-core";
 import { shortenAddress } from "thirdweb/utils";
+import { LeaderboardSkeleton } from "./LeaderboardSkeleton";
 
 // Initialize the client
 const stack = new StackClient({
@@ -14,6 +15,7 @@ const stack = new StackClient({
 
 export default function LeaderboardPage() {
   const [data, setData] = useState<Points[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [metadata, setMetadata] = useState({
     bannerUrl: "",
     name: "",
@@ -22,24 +24,34 @@ export default function LeaderboardPage() {
 
   useEffect(() => {
     const fetchData = async () => {
-      const leaderboard = await stack.getLeaderboard();
-      setData(
-        leaderboard?.leaderboard.map((item, i) => ({
-          uniqueId: i + 1, // Ensure unique IDs start at 1
-          address: shortenAddress(item.address),
-          points: item.points,
-          identities: item.identities,
-        }))
-      );
-      setMetadata({
-        bannerUrl: leaderboard?.metadata.bannerUrl,
-        name: leaderboard?.metadata.name,
-        description: leaderboard?.metadata.description,
-      });
+      try {
+        const leaderboard = await stack.getLeaderboard();
+        setData(
+          leaderboard?.leaderboard.map((item, i) => ({
+            uniqueId: i + 1, // Ensure unique IDs start at 1
+            address: shortenAddress(item.address),
+            points: item.points,
+            identities: item.identities,
+          }))
+        );
+        setMetadata({
+          bannerUrl: leaderboard?.metadata.bannerUrl,
+          name: leaderboard?.metadata.name,
+          description: leaderboard?.metadata.description,
+        });
+      } catch (error) {
+        console.error("Error fetching leaderboard data:", error);
+      } finally {
+        setIsLoading(false);
+      }
     };
 
     fetchData();
   }, []);
+
+  if (isLoading) {
+    return <LeaderboardSkeleton />;
+  }
 
   return (
     <>
@@ -50,6 +62,7 @@ export default function LeaderboardPage() {
             loading="lazy"
             src={metadata.bannerUrl}
             alt="Big DAO Leaderboard"
+            className="object-cover rounded-lg"
           />
         </div>
       </div>

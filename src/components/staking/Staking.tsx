@@ -19,6 +19,15 @@ import {
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
 import { ChevronDown, Plus, X } from "lucide-react";
+import { Skeleton } from "@/components/ui/skeleton";
+
+const NFTSkeleton = () => (
+  <div className="flex flex-col items-center w-full max-w-[200px] mx-auto">
+    <Skeleton className="rounded-lg mb-4 h-[200px] w-[200px]" />
+    <Skeleton className="h-6 w-32 mb-4" />
+    <Skeleton className="h-10 w-full rounded-lg" />
+  </div>
+);
 
 export const Staking = () => {
   const account = useActiveAccount();
@@ -96,7 +105,12 @@ export const Staking = () => {
             </CollapsibleTrigger>
             <CollapsibleContent className="mt-4 space-y-4">
               <div className="flex flex-col items-center justify-center w-full gap-4">
-                {ownedNFTs && ownedNFTs.length > 0 ? (
+                {ownedNFTsLoading ? (
+                  <>
+                    <NFTSkeleton />
+                    <NFTSkeleton />
+                  </>
+                ) : ownedNFTs && ownedNFTs.length > 0 ? (
                   ownedNFTs
                     .filter((nft: NFT) => !stakedInfo?.[0]?.includes(nft.id)) // Filter out staked NFTs
                     .map((nft: NFT) => (
@@ -136,7 +150,12 @@ export const Staking = () => {
             </CollapsibleTrigger>
             <CollapsibleContent className="mt-4 space-y-4">
               <div className="flex flex-col items-center justify-center w-full gap-4">
-                {stakedInfo && stakedInfo[0].length > 0 ? (
+                {!stakedInfo ? (
+                  <>
+                    <NFTSkeleton />
+                    <NFTSkeleton />
+                  </>
+                ) : stakedInfo[0].length > 0 ? (
                   stakedInfo[0].map((nft: any, index: number) => (
                     <div key={index} className="w-full max-w-sm mx-auto">
                       <StakedNFTCard

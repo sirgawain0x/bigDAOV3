@@ -10,6 +10,7 @@ import { prepareContractCall, toTokens } from "thirdweb";
 import { balanceOf } from "thirdweb/extensions/erc721";
 import { toast } from "sonner";
 import { getCurrencyMetadata } from "thirdweb/extensions/erc20";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export const StakeRewards = () => {
   const account = useActiveAccount();
@@ -46,28 +47,33 @@ export const StakeRewards = () => {
   return (
     <div className="flex flex-col w-full space-y-6">
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 p-4">
-        {!isTokenBalanceLoading && !tokenMetadataLoading && (
-          <div className="bg-background/50 p-4 rounded-lg">
-            <p className="text-lg font-medium">
-              {tokenMetadata?.symbol} Balance:{" "}
+        <div className="bg-background/50 p-4 rounded-lg">
+          <div className="text-lg font-medium flex items-center gap-2">
+            <span>{tokenMetadata?.symbol} Balance: </span>
+            {isTokenBalanceLoading || tokenMetadataLoading ? (
+              <Skeleton className="h-6 w-24" />
+            ) : (
               <span className="font-bold">
                 {Number(toTokens(BigInt(tokenBalance!.toString()), 18)).toFixed(
                   2
                 )}
               </span>
-            </p>
+            )}
           </div>
-        )}
+        </div>
         <div className="bg-background/50 p-4 rounded-lg">
-          <h2 className="text-lg font-medium">
-            {tokenMetadata?.symbol} Rewards:{" "}
-            <span className="font-bold">
-              {stakedInfo &&
-                Number(toTokens(BigInt(stakedInfo[1].toString()), 18)).toFixed(
+          <div className="text-lg font-medium flex items-center gap-2">
+            <span>{tokenMetadata?.symbol} Rewards: </span>
+            {!stakedInfo ? (
+              <Skeleton className="h-6 w-24" />
+            ) : (
+              <span className="font-bold">
+                {Number(toTokens(BigInt(stakedInfo[1].toString()), 18)).toFixed(
                   2
                 )}
-            </span>
-          </h2>
+              </span>
+            )}
+          </div>
         </div>
       </div>
 
