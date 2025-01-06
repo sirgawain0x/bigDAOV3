@@ -6,10 +6,11 @@ import {
   useReadContract,
 } from "thirdweb/react";
 import { REWARD_TOKEN_CONTRACT, STAKING_CONTRACT } from "@/lib/contracts";
-import { prepareContractCall, toEther } from "thirdweb";
+import { prepareContractCall, toTokens } from "thirdweb";
 import { balanceOf } from "thirdweb/extensions/erc721";
 import { toast } from "sonner";
 import { getCurrencyMetadata } from "thirdweb/extensions/erc20";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export const StakeRewards = () => {
   const account = useActiveAccount();
@@ -44,52 +45,66 @@ export const StakeRewards = () => {
   }, [refetchStakedInfo]);
 
   return (
-    <div className="flex flex-col w-full p-2">
-      {!isTokenBalanceLoading && !tokenMetadataLoading && (
-        <p>
-          {tokenMetadata?.symbol} Balance:{" "}
-          {toEther(BigInt(tokenBalance!.toString()))}
-        </p>
-      )}
-      <h2 className="text-lg font-bold mb-5">
-        <span className="">{tokenMetadata?.symbol} Earnings:</span>{" "}
-        {stakedInfo && toEther(BigInt(stakedInfo[1].toString()))}
-      </h2>
-      <div className="flex flex-row w-full">
-        <TransactionButton
-          style={{
-            border: "none",
-            backgroundColor: "#333",
-            color: "#fff",
-            padding: "10px",
-            borderRadius: "10px",
-            cursor: "pointer",
-            width: "100%",
-            fontSize: "12px",
-          }}
-          transaction={() =>
-            prepareContractCall({
-              contract: STAKING_CONTRACT,
-              method: "claimRewards",
-            })
-          }
-          onTransactionSent={(result) => {
-            console.log("Claiming rewards...", result.transactionHash);
-            toast("Claiming rewards...");
-          }}
-          onTransactionConfirmed={(receipt) => {
-            console.log("Rewards claimed!", receipt.transactionHash);
-            refetchStakedInfo();
-            refetchTokenBalance();
-            toast("Rewards claimed!");
-          }}
-          onError={(error) => {
-            console.error("Transaction error", error);
-            toast("Transaction error");
-          }}
-        >
-          Claim Earnings
-        </TransactionButton>
+    <div className="flex flex-col w-full space-y-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 p-4">
+        <div className="bg-background/50 p-4 rounded-lg">
+          <div className="text-lg font-medium flex items-center gap-2">
+            <span>{tokenMetadata?.symbol} Balance: </span>
+            {isTokenBalanceLoading || tokenMetadataLoading ? (
+              <Skeleton className="h-6 w-24" />
+            ) : (
+              <span className="font-bold">
+                {Number(toTokens(BigInt(tokenBalance!.toString()), 18)).toFixed(
+                  2
+                )}
+              </span>
+            )}
+          </div>
+        </div>
+        <div className="bg-background/50 p-4 rounded-lg">
+          <div className="text-lg font-medium flex items-center gap-2">
+            <span>{tokenMetadata?.symbol} Rewards: </span>
+            {!stakedInfo ? (
+              <Skeleton className="h-6 w-24" />
+            ) : (
+              <span className="font-bold">
+                {Number(toTokens(BigInt(stakedInfo[1].toString()), 18)).toFixed(
+                  2
+                )}
+              </span>
+            )}
+          </div>
+        </div>
+      </div>
+
+      <div className="px-4">
+        <div className="flex justify-center">
+          <TransactionButton
+            className="w-full sm:w-auto px-6 py-3 text-sm font-medium text-white bg-primary hover:bg-primary/40 rounded-lg transition-colors"
+            transaction={() =>
+              prepareContractCall({
+                contract: STAKING_CONTRACT,
+                method: "claimRewards",
+              })
+            }
+            onTransactionSent={(result) => {
+              console.log("Claiming rewards...", result.transactionHash);
+              toast("Claiming rewards...");
+            }}
+            onTransactionConfirmed={(receipt) => {
+              console.log("Rewards claimed!", receipt.transactionHash);
+              refetchStakedInfo();
+              refetchTokenBalance();
+              toast("Rewards claimed!");
+            }}
+            onError={(error) => {
+              console.error("Transaction error", error);
+              toast("Transaction error");
+            }}
+          >
+            Claim Earnings
+          </TransactionButton>
+        </div>
       </div>
     </div>
   );

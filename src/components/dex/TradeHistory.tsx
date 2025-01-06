@@ -1,12 +1,13 @@
-import React, { useEffect, useState } from 'react';
-import { useActiveAccount } from 'thirdweb/react';
-import { formatEther } from 'viem';
-import { DEX_CONTRACT } from '@/lib/contracts';
+import React, { useEffect, useState } from "react";
+import { useActiveAccount, useContractEvents } from "thirdweb/react";
+import { formatEther } from "viem";
+import { DEX_CONTRACT } from "@/lib/contracts";
+import { prepareEvent } from "thirdweb";
 
 interface Trade {
   timestamp: number;
   hash: string;
-  type: 'BUY' | 'SELL';
+  type: "BUY" | "SELL";
   amount: bigint;
   price: number;
 }
@@ -16,47 +17,42 @@ export function TradeHistory() {
   const [loading, setLoading] = useState(true);
   const activeAccount = useActiveAccount();
 
+  const preparedEvent = prepareEvent({
+    signature:
+      "event Transfer(address indexed from, address indexed to, uint256 value)",
+  });
+
+  const { data: events } = useContractEvents({
+    contract: DEX_CONTRACT,
+    events: [preparedEvent],
+  });
+
   useEffect(() => {
-    const fetchTradeHistory = async () => {
-      if (!activeAccount?.address) return;
+    if (!activeAccount?.address || !events) return;
 
-      try {
-        setLoading(true);
-        
-        // Get transfer events
-        const transferFilter = DEX_CONTRACT.filters.Transfer(
-          null,
-          activeAccount.address
-        );
-        
-        const events = await DEX_CONTRACT.queryFilter(transferFilter, -1000); // Last 1000 blocks
-        
-        const tradeData = await Promise.all(
-          events.map(async (event) => {
-            const block = await event.getBlock();
-            return {
-              timestamp: block.timestamp,
-              hash: event.transactionHash,
-              type: event.args.from === "0x0000000000000000000000000000000000000000" ? 'BUY' : 'SELL',
-              amount: event.args.value,
-              price: 0, // Calculate based on your AMM formula
-            };
-          })
-        );
+    try {
+      setLoading(true);
 
-        setTrades(tradeData.sort((a, b) => b.timestamp - a.timestamp));
-      } catch (error) {
-        console.error('Error fetching trade history:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
+      const tradeData: Trade[] = events
+        .filter((event) => event.args && 'from' in event.args && 'value' in event.args)
+        .map((event) => {
+          const args = event.args as { from: string; to: string; value: bigint };
+          return {
+            timestamp: Math.floor(Date.now() / 1000),
+            hash: event.transactionHash,
+            type: args.from === DEX_CONTRACT.address ? "SELL" : "BUY",
+            amount: args.value,
+            price: Number(formatEther(args.value)),
+          };
+        });
 
-    fetchTradeHistory();
-    // Refresh every minute
-    const interval = setInterval(fetchTradeHistory, 60000);
-    return () => clearInterval(interval);
-  }, [activeAccount?.address]);
+      setTrades(tradeData);
+    } catch (error) {
+      console.error("Error processing trade history:", error);
+    } finally {
+      setLoading(false);
+    }
+  }, [activeAccount?.address, events]);
 
   if (loading) return <div>Loading trade history...</div>;
   if (!trades.length) return <div>No trade history found</div>;
@@ -71,11 +67,16 @@ export function TradeHistory() {
             className="flex justify-between items-center p-2 rounded bg-background/10 hover:bg-background/20"
           >
             <div>
-              <span className={trade.type === 'BUY' ? 'text-green-500' : 'text-red-500'}>
+              <span
+                className={
+                  trade.type === "BUY" ? "text-green-500" : "text-red-500"
+                }
+              >
                 {trade.type}
               </span>
               <span className="ml-2 text-sm">
-                {formatEther(trade.amount)} {trade.type === 'BUY' ? 'BIG' : 'ETH'}
+                {formatEther(trade.amount)}{" "}
+                {trade.type === "BUY" ? "BIG" : "ETH"}
               </span>
             </div>
             <div className="text-sm text-muted-foreground">

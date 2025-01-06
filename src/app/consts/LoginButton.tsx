@@ -9,7 +9,7 @@ const wallets = [
   inAppWallet(),
   createWallet("io.metamask"),
   createWallet("com.coinbase.wallet"),
-  createWallet("com.crypto"),
+  createWallet("com.crypto.wallet"),
 ];
 
 export const LoginButton = () => {
