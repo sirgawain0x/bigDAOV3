@@ -16,11 +16,20 @@ export function useGetQuote(params: {
     params: [],
   });
 
-  // Get ETH balance from contract's total supply (represents ETH in pool)
   const { data: ethInContract, error: ethError, isLoading: ethLoading } = useReadContract({
     contract: DEX_CONTRACT,
     method: "totalSupply",
     params: [],
+  });
+
+  const { data: outputAmount, error: outputError } = useReadContract({
+    contract: DEX_CONTRACT,
+    method: "getAmountOfTokens",
+    params: amountIn ? [
+      amountIn,
+      tokenIn.symbol === "ETH" ? (ethInContract ?? 0n) : (tokensInContract ?? 0n),
+      tokenOut.symbol === "ETH" ? (ethInContract ?? 0n) : (tokensInContract ?? 0n),
+    ] : [0n, 0n, 0n], 
   });
 
   console.log('Contract state:', {
@@ -35,7 +44,6 @@ export function useGetQuote(params: {
     tokenOut: tokenOut?.symbol
   });
 
-  // If still loading, return undefined instead of null to prevent unnecessary renders
   if (tokensLoading || ethLoading) {
     return undefined;
   }
@@ -45,7 +53,6 @@ export function useGetQuote(params: {
     throw new Error(`Failed to fetch reserves: ${tokensError?.message || ethError?.message}`);
   }
 
-  // Check if the values exist but are zero
   if (tokensInContract === 0n || ethInContract === 0n) {
     console.warn('Pool has no liquidity:', {
       tokensInContract: tokensInContract?.toString(),
@@ -57,24 +64,9 @@ export function useGetQuote(params: {
     };
   }
 
-  if (!tokensInContract || !ethInContract) {
-    throw new Error("Failed to fetch reserves - values undefined");
-  }
-
-  if (!amountIn) {
+  if (!tokensInContract || !ethInContract || !amountIn) {
     return undefined;
   }
-
-  // Use the contract's getAmountOfTokens function to calculate output
-  const { data: outputAmount, error: outputError } = useReadContract({
-    contract: DEX_CONTRACT,
-    method: "getAmountOfTokens",
-    params: [
-      amountIn,
-      tokenIn.symbol === "ETH" ? ethInContract : tokensInContract,  // input reserve matches input token
-      tokenOut.symbol === "ETH" ? ethInContract : tokensInContract, // output reserve matches output token
-    ],
-  });
 
   if (outputError) {
     console.error('Contract error:', outputError);
@@ -85,7 +77,6 @@ export function useGetQuote(params: {
     return undefined;
   }
 
-  // Calculate effective price (avoid division by zero)
   const price = amountIn === 0n ? 0 : Number(outputAmount) / Number(amountIn);
 
   return {

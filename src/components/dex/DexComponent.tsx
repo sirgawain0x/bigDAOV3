@@ -1,20 +1,13 @@
 "use client";
-import { useState, useEffect, useCallback, useMemo } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { client } from "@/app/consts/client";
 import { base } from "thirdweb/chains";
-import {
-  getContract,
-  prepareContractCall,
-  sendTransaction,
-  toWei,
-  Address,
-} from "thirdweb";
+import { prepareContractCall, sendTransaction, toWei, Address } from "thirdweb";
 import { getBalance } from "thirdweb/extensions/erc20";
 import { Account } from "thirdweb/wallets";
 import { useActiveAccount, useWalletBalance } from "thirdweb/react";
 import Token from "@/app/types/token";
 import {
-  DEX_ADDRESS,
   TOKEN_ADDRESS,
   REWARD_TOKEN_CONTRACT,
   DEX_CONTRACT,
@@ -30,7 +23,7 @@ import {
 import approve from "@/app/transactions/approve";
 import { useGetQuote } from "@/lib/quote";
 import { useLiquidity } from "@/hooks/useLiquidity";
-import { LiquidityPanel } from "./LiquidityPanel";
+import LiquidityPanel from "./LiquidityPanel";
 import { formatEther } from "viem";
 import { TransactionModal } from "./TransactionModal";
 import { TradeHistory } from "./TradeHistory";
@@ -260,7 +253,7 @@ export const DexComponent = () => {
             symbol: "BIG",
             address: TOKEN_ADDRESS,
           },
-          spender: DEX_ADDRESS,
+          spender: DEX_CONTRACT.address as Address,
         });
 
         const tx = prepareContractCall({
