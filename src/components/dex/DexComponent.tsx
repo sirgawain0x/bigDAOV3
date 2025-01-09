@@ -38,6 +38,11 @@ import {
 export const DexComponent = () => {
   // State for exchange rate
   const [exchangeRate, setExchangeRate] = useState<number>(1); // Initialize with 1 as default
+  
+  // Form state
+  const [currentForm, setCurrentForm] = useState<"native" | "token">("native");
+  const [nativeValue, setNativeValue] = useState<string>("");
+  const [tokenValue, setTokenValue] = useState<string>("");
 
   // Use the quote hook at component level
   const quote = useGetQuote({
@@ -53,7 +58,9 @@ export const DexComponent = () => {
       decimals: 18,
       symbol: "ETH",
     },
-    amountIn: BigInt(10 ** 18), // 1 token
+    amountIn: currentForm === "native"
+      ? toWei(nativeValue || "0")
+      : toWei(tokenValue || "0"),
   });
 
   // Update exchange rate when quote changes
@@ -78,9 +85,6 @@ export const DexComponent = () => {
   const [nativeBalance, setNativeBalance] = useState<string>("0");
   const [tokenBalance, setTokenBalance] = useState<string>("0");
 
-  const [nativeValue, setNativeValue] = useState<string>("");
-  const [tokenValue, setTokenValue] = useState<string>("");
-  const [currentForm, setCurrentForm] = useState<string>("native");
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const { liquidityInfo, calculatePriceImpact } = useLiquidity();
@@ -217,8 +221,8 @@ export const DexComponent = () => {
           },
     amountIn:
       currentForm === "native"
-        ? BigInt(nativeValue || "0")
-        : BigInt(tokenValue || "0"),
+        ? toWei(nativeValue || "0")
+        : toWei(tokenValue || "0"),
   });
 
   useEffect(() => {

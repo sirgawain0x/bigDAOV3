@@ -34,9 +34,15 @@ export function TradeHistory() {
       setLoading(true);
 
       const tradeData: Trade[] = events
-        .filter((event) => event.args && 'from' in event.args && 'value' in event.args)
+        .filter(
+          (event) => event.args && "from" in event.args && "value" in event.args
+        )
         .map((event) => {
-          const args = event.args as { from: string; to: string; value: bigint };
+          const args = event.args as {
+            from: string;
+            to: string;
+            value: bigint;
+          };
           return {
             timestamp: Math.floor(Date.now() / 1000),
             hash: event.transactionHash,
