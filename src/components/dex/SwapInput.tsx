@@ -30,45 +30,32 @@ export default function SwapInput({
 
   return (
     <div className={styles.swapInputContainer}>
-      <input
-        type="number" // Keep input type as number
-        placeholder="0.0"
-        value={value}
-        onChange={(e) => setValue(e.target.value)} // Handle input change
-        disabled={current !== type}
-        className={styles.swapInput}
-        step="any" // Allow decimal input
-      />
-      <div
-        style={{
-          position: "absolute",
-          top: "10px",
-          right: "10px",
-        }}
-      >
-        <p
-          style={{
-            fontSize: "12px",
-            marginBottom: "-5px",
-          }}
-        >
-          {tokenSymbol}
-        </p>
-        <p
-          style={{
-            fontSize: "10px",
-          }}
-        >
-          Balance: {truncate(tokenBalance as string)}
-        </p>
-        {current === type && (
-          <button
-            onClick={() => setValue(max || "0")}
-            className={styles.maxButton}
-          >
-            Max
-          </button>
-        )}
+      <div className="flex flex-col w-full">
+        <input
+          type="number"
+          placeholder="0.0"
+          value={value}
+          onChange={(e) => setValue(e.target.value)}
+          disabled={current !== type}
+          className={styles.swapInput}
+          step="any"
+        />
+        <div className="flex justify-between items-center mt-2">
+          <div className="flex flex-col">
+            <span className="text-sm text-gray-300">{tokenSymbol}</span>
+            <span className="text-xs text-gray-400">
+              Balance: {truncate(tokenBalance as string)}
+            </span>
+          </div>
+          {current === type && (
+            <button
+              onClick={() => setValue(max || "0")}
+              className={styles.maxButton}
+            >
+              Max
+            </button>
+          )}
+        </div>
       </div>
     </div>
   );
