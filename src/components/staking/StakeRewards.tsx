@@ -85,21 +85,34 @@ export const StakeRewards = () => {
               prepareContractCall({
                 contract: STAKING_CONTRACT,
                 method: "claimRewards",
+                params: [],
               })
             }
             onTransactionSent={(result) => {
               console.log("Claiming rewards...", result.transactionHash);
-              toast("Claiming rewards...");
+              const rewardAmount = Number(
+                toTokens(BigInt(stakedInfo?.[1].toString() || "0"), 18)
+              ).toFixed(2);
+              toast.loading(`Claiming ${rewardAmount} ${tokenMetadata?.symbol || ''} rewards...`, {
+                id: "claiming-rewards"
+              });
             }}
             onTransactionConfirmed={(receipt) => {
               console.log("Rewards claimed!", receipt.transactionHash);
+              const rewardAmount = Number(
+                toTokens(BigInt(stakedInfo?.[1].toString() || "0"), 18)
+              ).toFixed(2);
               refetchStakedInfo();
               refetchTokenBalance();
-              toast("Rewards claimed!");
+              toast.success(`Successfully claimed ${rewardAmount} ${tokenMetadata?.symbol || ''} rewards!`, {
+                id: "claiming-rewards"
+              });
             }}
             onError={(error) => {
               console.error("Transaction error", error);
-              toast("Transaction error");
+              toast.error("Transaction failed", {
+                id: "claiming-rewards"
+              });
             }}
           >
             Claim Earnings
