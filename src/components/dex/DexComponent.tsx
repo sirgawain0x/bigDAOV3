@@ -23,7 +23,7 @@ import {
 import approve from "@/app/transactions/approve";
 import { useGetQuote } from "@/lib/quote";
 import { useLiquidity } from "@/hooks/useLiquidity";
-import LiquidityPanel from "./LiquidityPanel";
+import { LiquidityPanel } from "./LiquidityPanel";
 import { formatEther } from "viem";
 import { TransactionModal } from "./TransactionModal";
 import { TradeHistory } from "./TradeHistory";
@@ -38,7 +38,7 @@ import {
 export const DexComponent = () => {
   // State for exchange rate
   const [exchangeRate, setExchangeRate] = useState<number>(1); // Initialize with 1 as default
-  
+
   // Form state
   const [currentForm, setCurrentForm] = useState<"native" | "token">("native");
   const [nativeValue, setNativeValue] = useState<string>("");
@@ -58,9 +58,10 @@ export const DexComponent = () => {
       decimals: 18,
       symbol: "ETH",
     },
-    amountIn: currentForm === "native"
-      ? toWei(nativeValue || "0")
-      : toWei(tokenValue || "0"),
+    amountIn:
+      currentForm === "native"
+        ? toWei(nativeValue || "0")
+        : toWei(tokenValue || "0"),
   });
 
   // Update exchange rate when quote changes

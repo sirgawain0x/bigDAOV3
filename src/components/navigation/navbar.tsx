@@ -93,6 +93,16 @@ const Navbar = () => {
                         </Link>
                       </NavigationMenuItem>
                       <NavigationMenuItem>
+                        <Link href="/liquidity-page" legacyBehavior passHref>
+                          <NavigationMenuLink
+                            className={navigationMenuTriggerStyle()}
+                            onClick={handleLinkClick}
+                          >
+                            Provide Liquidity
+                          </NavigationMenuLink>
+                        </Link>
+                      </NavigationMenuItem>
+                      <NavigationMenuItem>
                         <Link href="/dex-page" legacyBehavior passHref>
                           <NavigationMenuLink
                             className={navigationMenuTriggerStyle()}
@@ -151,6 +161,16 @@ const Navbar = () => {
                         className={navigationMenuTriggerStyle()}
                       >
                         Earn Vault
+                      </NavigationMenuLink>
+                    </Link>
+                  </NavigationMenuItem>
+                  <NavigationMenuItem>
+                    <Link href="/liquidity-page" legacyBehavior passHref>
+                      <NavigationMenuLink
+                        className={navigationMenuTriggerStyle()}
+                        onClick={handleLinkClick}
+                      >
+                        Provide Liquidity
                       </NavigationMenuLink>
                     </Link>
                   </NavigationMenuItem>

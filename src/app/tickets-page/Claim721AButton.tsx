@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useState, useCallback } from "react";
-import { TransactionButton, useActiveAccount } from "thirdweb/react";
+import { TransactionWidget, useActiveAccount } from "thirdweb/react";
 import { getContract, type Address } from "thirdweb";
 import { balanceOf, claimTo } from "thirdweb/extensions/erc721";
 import { client } from "../consts/client";
@@ -32,38 +32,32 @@ function Claim721AButton() {
 
   return (
     <div className="mx-auto">
-      <div className="flex flex-row my-2">
+      <TransactionWidget
+        amount={"0.0002"}
+        client={client}
+        theme="dark"
+        transaction={claimTo({
+          contract: contract,
+          to: activeAccount?.address || "",
+          quantity: 1n,
+        })}
+        title="Juneteenth Unity Celebration"
+        description="Claim your BigDAO asset"
+        image="/2.png"
+      />
+      <div className="flex flex-row my-4">
         {activeAccount ? (
-          <p className="mx-auto">You have {nftOwned} assets.</p>
+          <p className="mx-auto">
+            Check the{" "}
+            <span className="text-green-500">
+              <a href="/stake-page">Earn Vault</a>
+            </span>{" "}
+            to view your earned rewards.
+          </p>
         ) : (
           <p className="mx-auto">Connect to claim an asset.</p>
         )}
       </div>
-
-      <TransactionButton
-        transaction={() =>
-          claimTo({
-            contract: contract,
-            to: activeAccount?.address as Address,
-            quantity: BigInt(1),
-          })
-        }
-        onTransactionSent={(result) => {
-          console.log("Transaction submitted", result.transactionHash);
-          toast("Transaction submitted");
-        }}
-        onTransactionConfirmed={(receipt) => {
-          console.log("Transaction confirmed", receipt.transactionHash);
-          getOwnedNFT();
-          toast("Transaction confirmed");
-        }}
-        onError={(error) => {
-          console.error("Transaction error", error);
-          toast("Transaction error");
-        }}
-      >
-        Claim Asset
-      </TransactionButton>
     </div>
   );
 }

@@ -56,26 +56,35 @@ export const Staking = () => {
           <p className="text-lg sm:text-xl font-medium">Buy an Asset</p>
           <TransactionButton
             className="w-full sm:w-auto px-4 py-2 text-sm font-medium text-white bg-primary hover:bg-primary/40 rounded-lg transition-colors"
-            transaction={() =>
-              claimTo({
+            transaction={() => {
+              if (!account?.address) {
+                throw new Error("Please connect your wallet");
+              }
+              return claimTo({
                 contract: NFT_CONTRACT,
-                to: account?.address || "",
+                to: account.address,
                 quantity: BigInt(1),
-              })
-            }
+              });
+            }}
             onTransactionSent={(result) => {
               console.log("Claiming an asset...", result.transactionHash);
-              toast("Claiming an asset...");
+              toast.loading("Claiming an asset...", {
+                id: "claiming-asset",
+              });
             }}
             onTransactionConfirmed={(receipt) => {
               console.log("Asset claimed!", receipt.transactionHash);
-              toast("Asset claimed!");
+              toast.success("Asset claimed successfully!", {
+                id: "claiming-asset",
+              });
               refetchStakedInfo();
               refetchOwnedNFTs();
             }}
             onError={(error) => {
               console.error("Transaction error", error);
-              toast("Transaction error");
+              toast.error("Failed to claim asset. Please try again.", {
+                id: "claiming-asset",
+              });
             }}
           >
             Buy to Earn
@@ -166,7 +175,9 @@ export const Staking = () => {
                     </div>
                   ))
                 ) : (
-                  <p className="text-center py-4">You have no assets earning yield.</p>
+                  <p className="text-center py-4">
+                    You have no assets earning yield.
+                  </p>
                 )}
               </div>
             </CollapsibleContent>

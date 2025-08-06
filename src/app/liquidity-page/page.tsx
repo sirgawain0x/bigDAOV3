@@ -1,6 +1,6 @@
 import { NextPage } from "next";
 // import { DexComponent } from "@/components/dex/DexComponent";
-import { SwapComponent } from "@/components/swap/Swap";
+import { DexComponent } from "@/components/dex/DexComponent";
 
 const DexPage: NextPage = () => {
   return (
@@ -8,15 +8,14 @@ const DexPage: NextPage = () => {
       <header className="flex flex-col items-center justify-center w-full py-4 sm:py-6 lg:py-8">
         <div className="mx-auto">
           <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-center">
-            Swap
+            Provide Liquidity
           </h1>
           <p className="text-sm sm:text-base lg:text-lg font-medium text-center">
-            Swap your rewards.
+            Add liquidity to earn fees.
           </p>
         </div>
       </header>
-      {/* <DexComponent /> */}
-      <SwapComponent />
+      <DexComponent />
     </div>
   );
 };
