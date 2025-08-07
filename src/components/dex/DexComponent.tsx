@@ -6,7 +6,6 @@ import { prepareContractCall, sendTransaction, toWei, Address } from "thirdweb";
 import { getBalance } from "thirdweb/extensions/erc20";
 import { Account } from "thirdweb/wallets";
 import { useActiveAccount, useWalletBalance } from "thirdweb/react";
-import Token from "@/app/types/token";
 import {
   TOKEN_ADDRESS,
   REWARD_TOKEN_CONTRACT,
@@ -16,17 +15,11 @@ import styles from "@/app/styles/Dex.module.css";
 import SwapInput from "./SwapInput";
 import { Button } from "@/components/ui/button";
 import { ArrowDown, ArrowUp } from "lucide-react";
-import {
-  allowance as thirdwebAllowance,
-  balanceOf,
-} from "thirdweb/extensions/erc20";
 import approve from "@/app/transactions/approve";
 import { useGetQuote } from "@/lib/quote";
 import { useLiquidity } from "@/hooks/useLiquidity";
-import { LiquidityPanel } from "./LiquidityPanel";
 import { formatEther } from "viem";
 import { TransactionModal } from "./TransactionModal";
-import { TradeHistory } from "./TradeHistory";
 import {
   Select,
   SelectContent,
@@ -297,149 +290,138 @@ export const DexComponent = () => {
   };
 
   return (
-    <main className={styles.main}>
-      <div className={styles.container}>
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-          {/* Left Column: Swap Interface */}
-          <div>
-            <div
-              style={{
-                backgroundColor: "#FFF",
-                padding: "2rem",
-                borderRadius: "10px",
-                border: "1px solid #ccc",
-                boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.1)",
-                minWidth: "440px",
-              }}
+    <div className="min-h-screen flex items-center justify-center p-4">
+      <div className="w-full max-w-md">
+        <div
+          style={{
+            backgroundColor: "#FFF",
+            padding: "2rem",
+            borderRadius: "10px",
+            border: "1px solid #ccc",
+            boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.1)",
+            width: "100%",
+          }}
+        >
+          {/* Slippage Settings */}
+          <div className="mb-4">
+            <label className="text-sm text-muted-foreground">
+              Slippage Tolerance
+            </label>
+            <Select
+              value={slippageTolerance.toString()}
+              onValueChange={(value) =>
+                setSlippageTolerance(parseFloat(value))
+              }
             >
-              {/* Slippage Settings */}
-              <div className="mb-4">
-                <label className="text-sm text-muted-foreground">
-                  Slippage Tolerance
-                </label>
-                <Select
-                  value={slippageTolerance.toString()}
-                  onValueChange={(value) =>
-                    setSlippageTolerance(parseFloat(value))
-                  }
+              <SelectTrigger>
+                <SelectValue placeholder="Select slippage tolerance" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="0.1">0.1%</SelectItem>
+                <SelectItem value="0.5">0.5%</SelectItem>
+                <SelectItem value="1.0">1.0%</SelectItem>
+                <SelectItem value="2.0">2.0%</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+
+          {/* Pool Info */}
+          {liquidityInfo && (
+            <div className="mb-4 p-2 rounded bg-background/10">
+              <div className="flex justify-between text-sm">
+                <span>
+                  Pool ETH: {formatEther(liquidityInfo.ethReserve)} ETH
+                </span>
+                <span>
+                  Pool BIG: {formatEther(liquidityInfo.tokenReserve)} BIG
+                </span>
+              </div>
+              {priceImpact > 0 && (
+                <div
+                  className={`mt-2 text-sm ${
+                    priceImpact > 5
+                      ? "text-red-500"
+                      : priceImpact > 3
+                      ? "text-yellow-500"
+                      : "text-green-500"
+                  }`}
                 >
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select slippage tolerance" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="0.1">0.1%</SelectItem>
-                    <SelectItem value="0.5">0.5%</SelectItem>
-                    <SelectItem value="1.0">1.0%</SelectItem>
-                    <SelectItem value="2.0">2.0%</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-
-              {/* Pool Info */}
-              {liquidityInfo && (
-                <div className="mb-4 p-2 rounded bg-background/10">
-                  <div className="flex justify-between text-sm">
-                    <span>
-                      Pool ETH: {formatEther(liquidityInfo.ethReserve)} ETH
+                  Price Impact: {priceImpact.toFixed(2)}%
+                  {priceImpact > 5 && (
+                    <span className="block text-xs">
+                      High price impact! Consider reducing trade size.
                     </span>
-                    <span>
-                      Pool BIG: {formatEther(liquidityInfo.tokenReserve)} BIG
-                    </span>
-                  </div>
-                  {priceImpact > 0 && (
-                    <div
-                      className={`mt-2 text-sm ${
-                        priceImpact > 5
-                          ? "text-red-500"
-                          : priceImpact > 3
-                          ? "text-yellow-500"
-                          : "text-green-500"
-                      }`}
-                    >
-                      Price Impact: {priceImpact.toFixed(2)}%
-                      {priceImpact > 5 && (
-                        <span className="block text-xs">
-                          High price impact! Consider reducing trade size.
-                        </span>
-                      )}
-                    </div>
                   )}
                 </div>
-              )}
-
-              {/* Swap Interface */}
-              <div>
-                <SwapInput
-                  current={currentForm}
-                  type="native"
-                  max={nativeBalance}
-                  value={nativeValue}
-                  setValue={(value) => handleInputChange(value, "native")}
-                  tokenSymbol="ETH"
-                  tokenBalance={nativeBalance}
-                />
-                <Button onClick={toggleForm} className={styles.toggleButton}>
-                  {currentForm === "native" ? (
-                    <ArrowDown className="w-4 h-4" />
-                  ) : (
-                    <ArrowUp className="w-4 h-4" />
-                  )}
-                </Button>
-                <SwapInput
-                  current={currentForm}
-                  type="token"
-                  max={tokenBalance}
-                  value={tokenValue}
-                  setValue={(value) => handleInputChange(value, "token")}
-                  tokenSymbol="BIG"
-                  tokenBalance={tokenBalance}
-                />
-              </div>
-
-              {activeAccount?.address ? (
-                <div style={{ textAlign: "center" }}>
-                  <button
-                    onClick={handleSwap}
-                    disabled={isLoading || priceImpact > 10}
-                    className={`${styles.swapButton} ${
-                      priceImpact > 5 ? "opacity-80" : ""
-                    }`}
-                  >
-                    {isLoading
-                      ? "Loading..."
-                      : priceImpact > 10
-                      ? "Price Impact Too High"
-                      : "Review Swap"}
-                  </button>
-                </div>
-              ) : (
-                <p>Connect wallet to exchange.</p>
               )}
             </div>
+          )}
 
-            {/* Transaction Modal */}
-            <TransactionModal
-              isOpen={showTransactionModal}
-              onClose={() => setShowTransactionModal(false)}
-              onConfirm={executeSwapWithSlippage}
-              inputAmount={currentForm === "native" ? nativeValue : tokenValue}
-              outputAmount={currentForm === "native" ? tokenValue : nativeValue}
-              inputToken={currentForm === "native" ? "ETH" : "BIG"}
-              outputToken={currentForm === "native" ? "BIG" : "ETH"}
-              priceImpact={priceImpact}
-              slippageTolerance={slippageTolerance}
-              minimumReceived={minimumReceived}
-              isLoading={isLoading}
+          {/* Swap Interface */}
+          <div>
+            <SwapInput
+              current={currentForm}
+              type="native"
+              max={nativeBalance}
+              value={nativeValue}
+              setValue={(value) => handleInputChange(value, "native")}
+              tokenSymbol="ETH"
+              tokenBalance={nativeBalance}
+            />
+            <Button onClick={toggleForm} className={styles.toggleButton}>
+              {currentForm === "native" ? (
+                <ArrowDown className="w-4 h-4" />
+              ) : (
+                <ArrowUp className="w-4 h-4" />
+              )}
+            </Button>
+            <SwapInput
+              current={currentForm}
+              type="token"
+              max={tokenBalance}
+              value={tokenValue}
+              setValue={(value) => handleInputChange(value, "token")}
+              tokenSymbol="BIG"
+              tokenBalance={tokenBalance}
             />
           </div>
 
-          {/* Right Column: Liquidity Panel and Trade History */}
-          <div className="space-y-4">
-            <LiquidityPanel />
-            <TradeHistory />
-          </div>
+          {activeAccount?.address ? (
+            <div style={{ textAlign: "center" }}>
+              <button
+                onClick={handleSwap}
+                disabled={isLoading || priceImpact > 10}
+                className={`${styles.swapButton} ${
+                  priceImpact > 5 ? "opacity-80" : ""
+                }`}
+              >
+                {isLoading
+                  ? "Loading..."
+                  : priceImpact > 10
+                  ? "Price Impact Too High"
+                  : "Review Swap"}
+              </button>
+            </div>
+          ) : (
+            <p>Connect wallet to exchange.</p>
+          )}
         </div>
+
+        {/* Transaction Modal */}
+        <TransactionModal
+          isOpen={showTransactionModal}
+          onClose={() => setShowTransactionModal(false)}
+          onConfirm={executeSwapWithSlippage}
+          inputAmount={currentForm === "native" ? nativeValue : tokenValue}
+          outputAmount={currentForm === "native" ? tokenValue : nativeValue}
+          inputToken={currentForm === "native" ? "ETH" : "BIG"}
+          outputToken={currentForm === "native" ? "BIG" : "ETH"}
+          priceImpact={priceImpact}
+          slippageTolerance={slippageTolerance}
+          minimumReceived={minimumReceived}
+          isLoading={isLoading}
+        />
       </div>
-    </main>
+    </div>
   );
 };

@@ -1,6 +1,5 @@
 import { NextPage } from "next";
-// import { DexComponent } from "@/components/dex/DexComponent";
-import { DexComponent } from "@/components/dex/DexComponent";
+import { LiquidityPanel } from "@/components/dex/LiquidityPanel";
 
 const DexPage: NextPage = () => {
   return (
@@ -15,7 +14,7 @@ const DexPage: NextPage = () => {
           </p>
         </div>
       </header>
-      <DexComponent />
+      <LiquidityPanel />
     </div>
   );
 };
