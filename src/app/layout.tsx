@@ -1,5 +1,4 @@
 import React from "react";
-import "@coinbase/onchainkit/styles.css";
 import "./globals.css";
 import Navbar from "@/components/navigation/navbar";
 import { Toaster } from "@/components/ui/toaster";

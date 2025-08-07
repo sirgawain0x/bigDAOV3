@@ -26,6 +26,7 @@ yarn-debug.log*
 yarn-error.log*
 
 # local env files
+.env
 .env*.local
 
 # vercel
@@ -38,3 +39,4 @@ next-env.d.ts
 # Auto Generated PWA files
 **/public/sw.js
 **/public/workbox-*.js
+

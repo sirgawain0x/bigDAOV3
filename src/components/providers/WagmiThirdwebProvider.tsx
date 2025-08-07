@@ -13,18 +13,19 @@ import {
   createConfig,
   http,
 } from "wagmi";
-import { base } from "thirdweb/chains";
+import { base as wagmiBase } from "wagmi/chains";
+import { base as thirdwebBase } from "thirdweb/chains";
 import { ThirdwebProvider } from "thirdweb/react";
-import { OnchainProvider } from "./OnchainKitProvider";
+
 
 const client = createThirdwebClient({
   clientId: process.env.NEXT_PUBLIC_THIRDWEB_CLIENT_ID!,
 });
 
 const wagmiConfig = createConfig({
-  chains: [base],
+  chains: [wagmiBase],
   transports: {
-    [base.id]: http(),
+    [wagmiBase.id]: http(),
   },
 });
 
@@ -35,10 +36,8 @@ export function WagmiThirdwebProvider({
 }) {
   return (
     <WagmiConfig config={wagmiConfig}>
-      <ThirdwebProvider supportedChains={[base]}>
-        <OnchainProvider>
-          <WalletConnector>{children}</WalletConnector>
-        </OnchainProvider>
+      <ThirdwebProvider>
+        <WalletConnector>{children}</WalletConnector>
       </ThirdwebProvider>
     </WagmiConfig>
   );
@@ -69,7 +68,7 @@ function WalletConnector({ children }: { children: React.ReactNode }) {
         });
         const w = createWalletAdapter({
           adaptedAccount,
-          chain: base,
+          chain: thirdwebBase,
           client,
           onDisconnect: async () => {
             await disconnectAsync();
@@ -93,6 +92,7 @@ function WalletConnector({ children }: { children: React.ReactNode }) {
   }, [
     walletClient,
     wagmiAccount.isConnected,
+    wagmiAccount.address,
     disconnectAsync,
     switchChainAsync,
     setActiveWallet,
