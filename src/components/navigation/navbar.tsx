@@ -19,7 +19,6 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { MenuIcon } from "lucide-react";
-import TokenBalanceBadge from "./TokenBalanceBadge";
 
 const Navbar = () => {
   const activeAccount = useActiveAccount();
@@ -75,24 +74,30 @@ const Navbar = () => {
                     <NavigationMenuList className="flex flex-col space-y-4">
                       <NavigationMenuItem>
                         <NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
+                          <Link href="/buy-big-coin" onClick={handleLinkClick}>Buy Big Coin</Link>
+                        </NavigationMenuLink>
+                      </NavigationMenuItem>
+                      <NavigationMenuItem>
+                        <NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
+                          <Link href="/dex-page" onClick={handleLinkClick}>Quick Swap</Link>
+                        </NavigationMenuLink>
+                      </NavigationMenuItem>
+                      <NavigationMenuItem>
+                        <NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
                           <Link href="/tickets-page" onClick={handleLinkClick}>Assets</Link>
                         </NavigationMenuLink>
                       </NavigationMenuItem>
-                      <NavigationMenuItem>
+                      {/* <NavigationMenuItem>
                         <NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
                           <Link href="/stake-page" onClick={handleLinkClick}>Earn Vault</Link>
                         </NavigationMenuLink>
-                      </NavigationMenuItem>
-                      <NavigationMenuItem>
+                      </NavigationMenuItem> */}
+                      {/* <NavigationMenuItem>
                         <NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
                           <Link href="/liquidity-page" onClick={handleLinkClick}>Provide Liquidity</Link>
                         </NavigationMenuLink>
-                      </NavigationMenuItem>
-                      <NavigationMenuItem>
-                        <NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
-                          <Link href="/dex-page" onClick={handleLinkClick}>Swap</Link>
-                        </NavigationMenuLink>
-                      </NavigationMenuItem>
+                      </NavigationMenuItem> */}
+                      
                       <NavigationMenuItem>
                         <NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
                           <Link href="/voting-page" onClick={handleLinkClick}>Vote</Link>
@@ -119,24 +124,29 @@ const Navbar = () => {
                 <>
                   <NavigationMenuItem>
                     <NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
+                      <Link href="/buy-big-coin">Buy Big Coin</Link>
+                    </NavigationMenuLink>
+                  </NavigationMenuItem>
+                    <NavigationMenuItem>
+                        <NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
+                          <Link href="/dex-page">Quick Swap</Link>
+                        </NavigationMenuLink>
+                    </NavigationMenuItem>
+                  <NavigationMenuItem>
+                    <NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
                       <Link href="/tickets-page">Assets</Link>
                     </NavigationMenuLink>
                   </NavigationMenuItem>
-                  <NavigationMenuItem>
+                  {/* <NavigationMenuItem>
                     <NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
                       <Link href="/stake-page">Earn Vault</Link>
                     </NavigationMenuLink>
-                  </NavigationMenuItem>
-                        <NavigationMenuItem>
+                  </NavigationMenuItem> */}
+                        {/* <NavigationMenuItem>
                           <NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
                             <Link href="/liquidity-page">Provide Liquidity</Link>
                           </NavigationMenuLink>
-                        </NavigationMenuItem>
-                      <NavigationMenuItem>
-                        <NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
-                          <Link href="/dex-page">Swap</Link>
-                        </NavigationMenuLink>
-                      </NavigationMenuItem>
+                        </NavigationMenuItem> */}
                   <NavigationMenuItem>
                     <NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
                       <Link href="/voting-page">Vote</Link>

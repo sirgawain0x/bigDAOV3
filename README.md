@@ -1,4 +1,22 @@
+# BigDAO - Decentralized Application
+
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+
+## Features
+
+- **Token Management**: View and manage your BigDAO tokens
+- **Staking**: Earn rewards by staking your NFTs
+- **Liquidity Provision**: Provide liquidity to earn trading fees
+- **DEX Trading**: Swap tokens on the decentralized exchange
+- **Voting**: Participate in DAO governance
+- **Leaderboard**: Track top performers
+- **Big Coin Purchase**: Buy Big Coin tokens using cbBTC at a fixed rate of 0.0002 cbBTC per token
+
+## Big Coin Token
+
+The Big Coin token can be purchased using cbBTC at a fixed rate of 0.0002 cbBTC per token. The token addresses are:
+- **Big Coin**: `0x3A8df31105Ef1e653EDF8B1B5EE486eB78803266` (Base)
+- **cbBTC**: `0xcbb7c0000ab88b473b1f5afd9ef808440eed33bf` (Base)
 
 ## Getting Started
 
