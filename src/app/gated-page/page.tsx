@@ -17,7 +17,7 @@ import Link from "next/link";
  * If `TRUE`: The users can access the page's content.
  */
 export default async function GatedPage() {
-  const jwt = cookies().get("jwt");
+  const jwt = (await cookies()).get("jwt");
   if (!jwt?.value) {
     return <MustLogin />;
   }

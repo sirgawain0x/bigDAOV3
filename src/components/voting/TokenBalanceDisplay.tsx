@@ -18,7 +18,7 @@ export const TokenBalanceDisplay = () => {
   
   const { data: bigTokenBalance, isLoading, error } = useReadContract({
     contract: REWARD_TOKEN_CONTRACT,
-    method: "function balanceOf(address account) view returns (uint256)",
+    method: "balanceOf",
     params: [account?.address || "0x0000000000000000000000000000000000000000"],
     queryOptions: {
       enabled: !!account?.address,

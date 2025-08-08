@@ -66,7 +66,7 @@ export const EnvironmentCheck = () => {
           </span>
         </div>
         <div className="text-xs text-muted-foreground mt-2">
-          Client-side variables must be "Configured" for proper functionality.
+          Client-side variables must be &quot;Configured&quot; for proper functionality.
         </div>
       </CardContent>
     </Card>

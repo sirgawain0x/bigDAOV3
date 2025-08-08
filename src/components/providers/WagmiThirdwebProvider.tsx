@@ -1,6 +1,5 @@
 "use client";
 import { ThirdwebProvider } from "thirdweb/react";
-import { client } from "@/app/consts/client";
 import { WagmiProvider, createConfig, http } from "wagmi";
 import { base } from "wagmi/chains";
 
@@ -19,7 +18,9 @@ export function WagmiThirdwebProvider({
 
   return (
     <WagmiProvider config={wagmiConfig}>
-      <ThirdwebProvider client={client}>{children}</ThirdwebProvider>
+      <ThirdwebProvider>
+        {children}
+      </ThirdwebProvider>
     </WagmiProvider>
   );
 }

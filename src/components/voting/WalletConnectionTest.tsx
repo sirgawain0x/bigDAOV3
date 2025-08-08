@@ -5,7 +5,6 @@ import { useAccount, useWalletClient } from "wagmi";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import { Button } from "../ui/button";
 import { REWARD_TOKEN_CONTRACT } from "@/lib/contracts";
-import { balanceOf } from "thirdweb/extensions/erc20";
 
 export const WalletConnectionTest = () => {
   const [mounted, setMounted] = useState(false);
@@ -14,9 +13,10 @@ export const WalletConnectionTest = () => {
   const { data: walletClient } = useWalletClient();
   
   // Always call hooks - this is required by Rules of Hooks
-  const { data: bigTokenBalance, isLoading, error } = useReadContract(balanceOf, {
+  const { data: bigTokenBalance, isLoading, error } = useReadContract({
     contract: REWARD_TOKEN_CONTRACT,
-    owner: thirdwebAccount?.address || "",
+    method: "balanceOf",
+    params: [thirdwebAccount?.address || ""],
     queryOptions: {
       enabled: !!thirdwebAccount?.address && !!REWARD_TOKEN_CONTRACT && mounted,
     },
