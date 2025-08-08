@@ -1,6 +1,6 @@
 "use client";
-import { useReadContract, PayEmbed, useActiveAccount } from "thirdweb/react";
-import { getContract } from "thirdweb";
+import { useReadContract, BuyWidget, useActiveAccount } from "thirdweb/react";
+import { getContract, toWei, NATIVE_TOKEN_ADDRESS } from "thirdweb";
 import { client } from "../consts/client";
 import { base } from "thirdweb/chains";
 import { getNFT } from "thirdweb/extensions/erc721";
@@ -23,22 +23,19 @@ export const TicketContent = () => {
       <div className="max-w-lg mx-auto">
         {!nftLoading && firstNFT && <NFTCard nft={firstNFT} />}
       </div>
-      <div className="max-w-lg mx-auto">
-        <PayEmbed
+      {/* <div className="max-w-lg mx-auto">
+        <BuyWidget
           client={client}
-          connectOptions={{
-            connectModal: {
-              size: "compact",
-            },
-          }}
-          payOptions={{
-            prefillBuy: {
-              chain: base,
-              amount: "0.001",
-            },
+          chain={base}
+          tokenAddress={NATIVE_TOKEN_ADDRESS} // USDC on Base
+          amount="0.002" // top up 5 USDC by default (user can change this)
+          title="Get Funds"
+          description="Top up your wallet with crypto"
+          onSuccess={() => {
+            alert("Top up successful!");
           }}
         />
-      </div>
+      </div> */}
     </div>
   );
 };

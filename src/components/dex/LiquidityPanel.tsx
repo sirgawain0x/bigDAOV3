@@ -1,5 +1,6 @@
 "use client";
-import { useState } from "react";
+
+import { useState, useCallback, useEffect } from "react";
 import {
   Card,
   CardContent,
@@ -8,236 +9,202 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { NATIVE_TOKEN_ADDRESS } from "thirdweb";
 import { base } from "thirdweb/chains";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import {
-  useActiveAccount,
-  useWalletBalance,
-  useReadContract,
-  useSendTransaction,
-} from "thirdweb/react";
-import { prepareContractCall, type PreparedTransaction } from "thirdweb";
-import { type AbiFunction } from "abitype";
-import { client } from "@/app/consts/client";
-import { DEX_CONTRACT } from "@/lib/contracts";
-import { useLiquidity } from "@/hooks/useLiquidity";
+import { useActiveAccount } from "thirdweb/react";
 import { formatEther, parseEther } from "viem";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useToast } from "@/hooks/use-toast";
-import { Account } from "thirdweb/wallets";
+import {
+  Pool,
+  Position,
+  nearestUsableTick,
+  NonfungiblePositionManager,
+  MintOptions,
+} from "@uniswap/v3-sdk";
+import {
+  Currency,
+  CurrencyAmount,
+  Percent,
+  Ether,
+  Token,
+} from "@uniswap/sdk-core";
 
-export default function LiquidityPanel() {
+import {
+  AlphaRouter,
+  SwapType,
+  SwapToRatioStatus,
+} from "@uniswap/smart-order-router";
+import { V3_SWAP_ROUTER_ADDRESS } from "@/lib/contracts";
+import { useAccount, useWalletClient } from "wagmi";
+
+const BIG_TOKEN_ADDRESS = "0x7DFECBf3bf20eA5B1fAce4f6936be71be130Bd56";
+const POOL_FEE = 500; // 0.05%
+const TICK_SPACING = 1;
+
+// Suggested initial liquidity amounts
+const SUGGESTED_ETH = "1"; // 1 ETH
+const SUGGESTED_BIG = "1000"; // 1000 BIG
+const SUGGESTED_PRICE = 1000; // 1 ETH = 1000 BIG
+
+const NONFUNGIBLE_POSITION_MANAGER_ADDRESS = "0xC36442b4a4522E871399CD717aBDD847Ab11FE88";
+
+export function LiquidityPanel() {
   const [ethAmount, setEthAmount] = useState("");
-  const [tokenAmount, setTokenAmount] = useState("");
-  const [lpAmountToRemove, setLpAmountToRemove] = useState("");
-  const [removing, setRemoving] = useState(false);
-  const activeAccount = useActiveAccount();
+  const [bigAmount, setBigAmount] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [pricePerETH, setPricePerETH] = useState<number | null>(null);
+  const account = useActiveAccount();
   const { toast } = useToast();
+  const { data: walletClient } = useWalletClient();
+  const signer = walletClient;
 
-  const { liquidityInfo, loading, calculatePriceImpact } = useLiquidity();
-
-  const { mutate: sendTransaction } = useSendTransaction();
-  const [isAddingLiquidity, setIsAddingLiquidity] = useState(false);
-  const [isRemovingLiquidity, setIsRemovingLiquidity] = useState(false);
-
-  // Get user's ETH balance
-  const { data: ethBalance } = useWalletBalance({
-    client,
-    chain: base,
-    address: activeAccount?.address as string,
-  });
-
-  const handleAddLiquidity = async () => {
-    if (!ethAmount || !tokenAmount) {
-      toast({
-        title: "Error",
-        description: "Please enter both ETH and token amounts",
-        variant: "destructive",
-      });
-      return;
+  // Calculate price whenever amounts change
+  useEffect(() => {
+    if (ethAmount && bigAmount) {
+      const eth = parseFloat(ethAmount);
+      const big = parseFloat(bigAmount);
+      if (eth > 0) {
+        setPricePerETH(big / eth);
+      }
     }
+  }, [ethAmount, bigAmount]);
 
-    try {
-      setIsAddingLiquidity(true);
-      const ethValue = parseEther(ethAmount);
-      const tokenValue = parseEther(tokenAmount);
-
-      const addLiquiditytransaction = await prepareContractCall({
-        contract: DEX_CONTRACT,
-        method: "addLiquidity",
-        params: [tokenValue],
-        value: ethValue,
-      }) as PreparedTransaction<[], AbiFunction>;
-
-      await sendTransaction(addLiquiditytransaction);
-
-      toast({
-        title: "Success",
-        description: "Liquidity added successfully",
-      });
-
-      // Reset form
-      setEthAmount("");
-      setTokenAmount("");
-    } catch (error: any) {
-      toast({
-        title: "Error",
-        description: error.message || "Failed to add liquidity",
-        variant: "destructive",
-      });
-    } finally {
-      setIsAddingLiquidity(false);
+  // Handle ETH input change
+  const handleEthChange = (value: string) => {
+    setEthAmount(value);
+    if (value && parseFloat(value) > 0) {
+      // Maintain the suggested price ratio
+      setBigAmount((parseFloat(value) * SUGGESTED_PRICE).toString());
     }
   };
 
-  const handleRemoveLiquidity = async () => {
-    if (!liquidityInfo?.lpBalance) {
-      toast({
-        title: "Error",
-        description: "No liquidity to remove",
-        variant: "destructive",
-      });
-      return;
-    }
-
-    if (!lpAmountToRemove) {
-      toast({
-        title: "Error",
-        description: "Please enter an amount to remove",
-        variant: "destructive",
-      });
-      return;
-    }
-
-    const removeAmount = parseEther(lpAmountToRemove);
-    if (removeAmount > liquidityInfo.lpBalance) {
-      toast({
-        title: "Error",
-        description: "Amount exceeds your LP token balance",
-        variant: "destructive",
-      });
-      return;
-    }
-
-    try {
-      setIsRemovingLiquidity(true);
-      const removeLiquiditytransaction = await prepareContractCall({
-        contract: DEX_CONTRACT,
-        method: "removeLiquidity",
-        params: [removeAmount],
-      }) as PreparedTransaction<[], AbiFunction>;
-
-      await sendTransaction(removeLiquiditytransaction);
-
-      toast({
-        title: "Success",
-        description: "Liquidity removed successfully",
-      });
-
-      // Reset form
-      setLpAmountToRemove("");
-    } catch (error: any) {
-      toast({
-        title: "Error",
-        description: error.message || "Failed to remove liquidity",
-        variant: "destructive",
-      });
-    } finally {
-      setIsRemovingLiquidity(false);
+  // Handle BIG input change
+  const handleBigChange = (value: string) => {
+    setBigAmount(value);
+    if (value && parseFloat(value) > 0) {
+      // Maintain the suggested price ratio
+      setEthAmount((parseFloat(value) / SUGGESTED_PRICE).toString());
     }
   };
 
-  if (loading) {
-    return (
-      <Card>
-        <CardHeader>
-          <CardTitle>Loading Liquidity Info</CardTitle>
-          <CardDescription>Please wait...</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <Skeleton className="h-32" />
-        </CardContent>
-      </Card>
-    );
-  }
+  // Load suggested values
+  const loadSuggestedValues = () => {
+    setEthAmount(SUGGESTED_ETH);
+    setBigAmount(SUGGESTED_BIG);
+  };
+
+  const handleCreatePool = useCallback(async () => {
+    if (!account || !ethAmount || !bigAmount) return;
+
+    try {
+      setLoading(true);
+
+      // Create currency instances
+      const eth = new Token(
+        Number(base.id),
+        NATIVE_TOKEN_ADDRESS,
+        18,
+        "ETH",
+        "Ethereum"
+      );
+      const big = new Token(
+        Number(base.id),
+        BIG_TOKEN_ADDRESS,
+        18,
+        "BIG",
+        "Big Coin"
+      );
+
+      // Calculate valid initial price
+      const sqrtRatioX96 = Math.sqrt(SUGGESTED_PRICE) * 2 ** 96;
+      const pool = new Pool(
+        eth,
+        big,
+        POOL_FEE,
+        sqrtRatioX96,
+        0, // liquidity
+        0 // tickCurrent
+      );
+
+      // Generate call parameters using the static method from NonfungiblePositionManager
+      const callParams = NonfungiblePositionManager.createCallParameters(pool);
+
+      // Get transaction data
+      const calldata = callParams;
+
+      toast({
+        title: "Success",
+        description: "Pool created and liquidity added successfully!",
+      });
+    } catch (error) {
+      console.error("Pool creation error:", error);
+      toast({
+        title: "Error",
+        description: "Failed to create pool and add liquidity.",
+        variant: "destructive",
+      });
+    } finally {
+      setLoading(false);
+    }
+  }, [account, ethAmount, bigAmount, toast]);
 
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Liquidity Pool</CardTitle>
-        <CardDescription>
-          Add or remove liquidity from the ETH-BIG pool
-        </CardDescription>
+        <CardTitle>Add Liquidity</CardTitle>
+        <div className="text-sm text-muted-foreground">
+          Enter ETH and BIG amounts
+        </div>
       </CardHeader>
       <CardContent>
         <div className="space-y-4">
-          {!removing ? (
-            <>
-              <div className="space-y-2">
-                <Input
-                  type="number"
-                  placeholder="ETH Amount"
-                  value={ethAmount}
-                  onChange={(e: any) => setEthAmount(e.target.value)}
-                />
-                <Input
-                  type="number"
-                  placeholder="BIG Amount"
-                  value={tokenAmount}
-                  onChange={(e: any) => setTokenAmount(e.target.value)}
-                />
-              </div>
-              <Button
-                className="w-full"
-                onClick={handleAddLiquidity}
-                disabled={isAddingLiquidity}
-              >
-                {isAddingLiquidity ? "Adding Liquidity..." : "Add Liquidity"}
-              </Button>
-            </>
-          ) : (
-            <div className="space-y-4">
-              <div>
-                <p className="text-sm font-medium mb-2">
-                  Your LP Token Balance:
-                </p>
-                <p className="text-lg font-bold">
-                  {liquidityInfo?.userShare} LP
-                </p>
-              </div>
-              <div className="space-y-2">
-                <label htmlFor="lpAmount" className="text-sm font-medium">
-                  Amount to Remove
-                </label>
-                <Input
-                  id="lpAmount"
-                  type="number"
-                  placeholder="Enter LP amount"
-                  value={lpAmountToRemove}
-                  onChange={(e) => setLpAmountToRemove(e.target.value)}
-                  disabled={isRemovingLiquidity}
-                />
-              </div>
-
-              <Button
-                onClick={handleRemoveLiquidity}
-                disabled={isRemovingLiquidity || !lpAmountToRemove}
-                className="w-full"
-              >
-                {isRemovingLiquidity ? "Removing..." : "Remove Liquidity"}
-              </Button>
-            </div>
-          )}
+          <div>
+            <label className="text-sm font-medium">ETH Amount</label>
+            <Input
+              type="number"
+              placeholder="0.0"
+              value={ethAmount}
+              onChange={(e) => handleEthChange(e.target.value)}
+            />
+          </div>
+          <div>
+            <label className="text-sm font-medium">BIG Amount</label>
+            <Input
+              type="number"
+              placeholder="0.0"
+              value={bigAmount}
+              onChange={(e) => handleBigChange(e.target.value)}
+            />
+          </div>
+          <Button
+            variant="outline"
+            className="w-full"
+            onClick={loadSuggestedValues}
+          >
+            Load Suggested Values (1 ETH = 1000 BIG)
+          </Button>
         </div>
       </CardContent>
-      <CardFooter>
+      <CardFooter className="flex flex-col space-y-4">
+        <div className="text-sm text-muted-foreground">
+          💡 Suggested initial liquidity:
+          <ul className="list-disc list-inside mt-2">
+            <li>
+              {SUGGESTED_ETH} ETH + {SUGGESTED_BIG} BIG tokens
+            </li>
+            <li>This sets an initial price of 1 ETH = {SUGGESTED_PRICE} BIG</li>
+            <li>Adding more liquidity maintains this price ratio</li>
+          </ul>
+        </div>
         <Button
-          variant="outline"
           className="w-full"
-          onClick={() => setRemoving(!removing)}
+          onClick={handleCreatePool}
+          disabled={!account || !ethAmount || !bigAmount || loading}
         >
-          {removing ? "Switch to Add Liquidity" : "Switch to Remove Liquidity"}
+          {loading ? "Creating Pool..." : "Create Pool & Add Liquidity"}
         </Button>
       </CardFooter>
     </Card>

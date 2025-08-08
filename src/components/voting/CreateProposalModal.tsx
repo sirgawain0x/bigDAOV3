@@ -1,6 +1,4 @@
-"use client";
-
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Dialog,
   DialogContent,
@@ -17,6 +15,8 @@ import { useActiveAccount, useReadContract } from "thirdweb/react";
 import { TOKEN_ADDRESS } from "@/lib/contracts";
 import { formatEther, parseEther } from "viem";
 import { toast } from "sonner";
+import { getBlockNumber } from "thirdweb/extensions/multicall3";
+import { VOTING_CONTRACT } from "@/lib/contracts";
 
 export function CreateProposalModal() {
   const [open, setOpen] = useState(false);
@@ -29,10 +29,23 @@ export function CreateProposalModal() {
   const { usePropose, useVotingPower } = useVoting();
   const { propose } = usePropose();
 
-  // Get user's voting power
+  // Fetch current block number
+  const [currentBlock, setCurrentBlock] = useState<bigint | undefined>(
+    undefined
+  );
+  useEffect(() => {
+    async function fetchBlockNumber() {
+      if (!VOTING_CONTRACT) return;
+      const bn = await getBlockNumber({ contract: VOTING_CONTRACT });
+      setCurrentBlock(bn);
+    }
+    fetchBlockNumber();
+  }, []);
+
+  // Get user's voting power using the current block number
   const { data: votingPower } = useVotingPower(
     account?.address || "",
-    BigInt(0) // current block
+    BigInt(currentBlock || "")
   );
 
   const hasEnoughTokens = votingPower && votingPower >= parseEther("100000");
@@ -49,7 +62,7 @@ export function CreateProposalModal() {
     }
 
     try {
-      await propose(
+      propose(
         [target], // targets
         [parseEther(value || "0")], // values
         [`0x${calldata}`], // calldatas

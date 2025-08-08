@@ -93,6 +93,16 @@ const Navbar = () => {
                         </Link>
                       </NavigationMenuItem>
                       <NavigationMenuItem>
+                        <Link href="/liquidity-page" legacyBehavior passHref>
+                          <NavigationMenuLink
+                            className={navigationMenuTriggerStyle()}
+                            onClick={handleLinkClick}
+                          >
+                            Provide Liquidity
+                          </NavigationMenuLink>
+                        </Link>
+                      </NavigationMenuItem>
+                      <NavigationMenuItem>
                         <Link href="/dex-page" legacyBehavior passHref>
                           <NavigationMenuLink
                             className={navigationMenuTriggerStyle()}
@@ -154,15 +164,25 @@ const Navbar = () => {
                       </NavigationMenuLink>
                     </Link>
                   </NavigationMenuItem>
-                  <NavigationMenuItem>
-                    <Link href="/dex-page" legacyBehavior passHref>
-                      <NavigationMenuLink
-                        className={navigationMenuTriggerStyle()}
-                      >
-                        Swap
-                      </NavigationMenuLink>
-                    </Link>
-                  </NavigationMenuItem>
+                                        <NavigationMenuItem>
+                        <Link href="/liquidity-page" legacyBehavior passHref>
+                          <NavigationMenuLink
+                            className={navigationMenuTriggerStyle()}
+                            onClick={handleLinkClick}
+                          >
+                            Provide Liquidity
+                          </NavigationMenuLink>
+                        </Link>
+                      </NavigationMenuItem>
+                      <NavigationMenuItem>
+                        <Link href="/dex-page" legacyBehavior passHref>
+                          <NavigationMenuLink
+                            className={navigationMenuTriggerStyle()}
+                          >
+                            Swap
+                          </NavigationMenuLink>
+                        </Link>
+                      </NavigationMenuItem>
                   <NavigationMenuItem>
                     <Link href="/voting-page" legacyBehavior passHref>
                       <NavigationMenuLink

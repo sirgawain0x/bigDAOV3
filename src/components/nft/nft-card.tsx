@@ -31,11 +31,9 @@ const NFTCard = ({ nft }: Props) => {
           </CardDescription>
         </CardHeader>
         <CardContent className="flex items-center justify-center">
-          <MediaRenderer client={client} src={nft?.metadata.image} />
-        </CardContent>
-        <CardFooter className="text-xs">
           <Claim721AButton />
-        </CardFooter>
+        </CardContent>
+        <CardFooter className="text-xs"></CardFooter>
       </Card>
     </div>
   );

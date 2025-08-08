@@ -4,6 +4,7 @@ import { client } from "./client";
 import { base } from "thirdweb/chains";
 import { createWallet, inAppWallet } from "thirdweb/wallets";
 import { FACTORY_CONTRACT } from "@/lib/contracts";
+import { NATIVE_TOKEN_ADDRESS } from "thirdweb";
 
 const wallets = [
   inAppWallet(),
@@ -54,6 +55,12 @@ export const LoginButton = () => {
             name: "BigCoin",
             symbol: "BIG",
             icon: "https://bafybeigj7octmywpez3gyhxger24o3lgntad5uzrb6wa673lv7p774ih4a.ipfs.w3s.link/BigCoin.png",
+          },
+          {
+            address: "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+            name: "USDC",
+            symbol: "USDC",
+            icon: "/icons/usdc-logo.svg",
           },
         ],
       }}
