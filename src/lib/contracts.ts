@@ -6,12 +6,12 @@ import { voteABI } from "./voteABI";
 import { dexABI } from "./dexABI";
 
 const nftContractAddress = "0x214cDD4C76Aa2A632Cc64AF522326f2a1f191908";
-const rewardTokenContractAddress = "0x7DFECBf3bf20eA5B1fAce4f6936be71be130Bd56";
+const rewardTokenContractAddress = "0x3A8df31105Ef1e653EDF8B1B5EE486eB78803266";
 const stakingContractAddress = "0xCc5447e03b827CE620BCfC8D3b4edF3043D43704";
 const votingContractAddress = "0xe26e4c90e38Bf7a2753e97397307DD6fA7e576A2";
 const dexContractAddress = "0xADC9c9270A394fB84CF28E28D45e2513CEAD35Bb";
 export const FACTORY_CONTRACT = "0xE90DebFD907F5B655f22bfC16083E45994d708bE";
-export const TOKEN_ADDRESS = "0x7DFECBf3bf20eA5B1fAce4f6936be71be130Bd56";
+export const TOKEN_ADDRESS = "0x3A8df31105Ef1e653EDF8B1B5EE486eB78803266";
 
 export const NFT_CONTRACT = getContract({
   client: client,
