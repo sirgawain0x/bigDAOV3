@@ -5,6 +5,7 @@ import { NFT_CONTRACT, STAKING_CONTRACT } from "@/lib/contracts";
 import { useState } from "react";
 import { approve } from "thirdweb/extensions/erc721";
 import { toast } from "sonner";
+import { getReadableError, isUserRejectedError } from "@/lib/utils";
 
 type OwnedNFTsProps = {
   nft: NFT;
@@ -65,6 +66,13 @@ export const NFTCard = ({
                   })
                 }
                 className="w-full"
+                onError={(error) => {
+                  if (isUserRejectedError(error)) {
+                    toast("Approval canceled");
+                    return;
+                  }
+                  toast.error(getReadableError(error, "Approval failed"));
+                }}
                 onTransactionConfirmed={() => setIsApproved(true)}
               >
                 Approve
@@ -84,6 +92,13 @@ export const NFTCard = ({
                   setIsModalOpen(false);
                   refetchOwnedNFTs();
                   refetchStakedInfo();
+                }}
+                onError={(error) => {
+                  if (isUserRejectedError(error)) {
+                    toast("Staking canceled");
+                    return;
+                  }
+                  toast.error(getReadableError(error, "Failed to stake"));
                 }}
                 className="w-full"
               >

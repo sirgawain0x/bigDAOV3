@@ -8,6 +8,7 @@ import { getNFT } from "thirdweb/extensions/erc721";
 import { client } from "@/app/consts/client";
 import { prepareContractCall } from "thirdweb";
 import { toast } from "sonner";
+import { getReadableError, isUserRejectedError } from "@/lib/utils";
 
 type StakedNFTCardProps = {
   tokenId: bigint;
@@ -53,8 +54,12 @@ export const StakedNFTCard: React.FC<StakedNFTCardProps> = ({
           toast("Your asset has been withdrawn!");
         }}
         onError={(error) => {
+          if (isUserRejectedError(error)) {
+            toast("Withdrawal canceled");
+            return;
+          }
           console.error("Transaction error", error);
-          toast("Transaction error");
+          toast.error(getReadableError(error, "Withdrawal failed"));
         }}
       >
         Withdraw

@@ -12,6 +12,7 @@ import { claimTo } from "thirdweb/extensions/erc721";
 import { NFTCard } from "./NFTCard";
 import { StakedNFTCard } from "./StakedNFTCard";
 import { toast } from "sonner";
+import { getReadableError, isUserRejectedError } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import {
   Collapsible,
@@ -81,8 +82,13 @@ export const Staking = () => {
               refetchOwnedNFTs();
             }}
             onError={(error) => {
+              if (isUserRejectedError(error)) {
+                toast("Transaction canceled", { id: "claiming-asset" });
+                return;
+              }
+
               console.error("Transaction error", error);
-              toast.error("Failed to claim asset. Please try again.", {
+              toast.error(getReadableError(error, "Failed to claim asset. Please try again."), {
                 id: "claiming-asset",
               });
             }}

@@ -19,6 +19,7 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { MenuIcon } from "lucide-react";
+import TokenBalanceBadge from "./TokenBalanceBadge";
 
 const Navbar = () => {
   const activeAccount = useActiveAccount();
@@ -73,64 +74,34 @@ const Navbar = () => {
                   <NavigationMenu>
                     <NavigationMenuList className="flex flex-col space-y-4">
                       <NavigationMenuItem>
-                        <Link href="/tickets-page" legacyBehavior passHref>
-                          <NavigationMenuLink
-                            className={navigationMenuTriggerStyle()}
-                            onClick={handleLinkClick}
-                          >
-                            Assets
-                          </NavigationMenuLink>
-                        </Link>
+                        <NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
+                          <Link href="/tickets-page" onClick={handleLinkClick}>Assets</Link>
+                        </NavigationMenuLink>
                       </NavigationMenuItem>
                       <NavigationMenuItem>
-                        <Link href="/stake-page" legacyBehavior passHref>
-                          <NavigationMenuLink
-                            className={navigationMenuTriggerStyle()}
-                            onClick={handleLinkClick}
-                          >
-                            Earn Vault
-                          </NavigationMenuLink>
-                        </Link>
+                        <NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
+                          <Link href="/stake-page" onClick={handleLinkClick}>Earn Vault</Link>
+                        </NavigationMenuLink>
                       </NavigationMenuItem>
                       <NavigationMenuItem>
-                        <Link href="/liquidity-page" legacyBehavior passHref>
-                          <NavigationMenuLink
-                            className={navigationMenuTriggerStyle()}
-                            onClick={handleLinkClick}
-                          >
-                            Provide Liquidity
-                          </NavigationMenuLink>
-                        </Link>
+                        <NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
+                          <Link href="/liquidity-page" onClick={handleLinkClick}>Provide Liquidity</Link>
+                        </NavigationMenuLink>
                       </NavigationMenuItem>
                       <NavigationMenuItem>
-                        <Link href="/dex-page" legacyBehavior passHref>
-                          <NavigationMenuLink
-                            className={navigationMenuTriggerStyle()}
-                            onClick={handleLinkClick}
-                          >
-                            Swap
-                          </NavigationMenuLink>
-                        </Link>
+                        <NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
+                          <Link href="/dex-page" onClick={handleLinkClick}>Swap</Link>
+                        </NavigationMenuLink>
                       </NavigationMenuItem>
                       <NavigationMenuItem>
-                        <Link href="/voting-page" legacyBehavior passHref>
-                          <NavigationMenuLink
-                            className={navigationMenuTriggerStyle()}
-                            onClick={handleLinkClick}
-                          >
-                            Vote
-                          </NavigationMenuLink>
-                        </Link>
+                        <NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
+                          <Link href="/voting-page" onClick={handleLinkClick}>Vote</Link>
+                        </NavigationMenuLink>
                       </NavigationMenuItem>
                       <NavigationMenuItem>
-                        <Link href="/leaderboard" legacyBehavior passHref>
-                          <NavigationMenuLink
-                            className={navigationMenuTriggerStyle()}
-                            onClick={handleLinkClick}
-                          >
-                            Leaderboard
-                          </NavigationMenuLink>
-                        </Link>
+                        <NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
+                          <Link href="/leaderboard" onClick={handleLinkClick}>Leaderboard</Link>
+                        </NavigationMenuLink>
                       </NavigationMenuItem>
                     </NavigationMenuList>
                   </NavigationMenu>
@@ -147,59 +118,34 @@ const Navbar = () => {
               {activeAccount && (
                 <>
                   <NavigationMenuItem>
-                    <Link href="/tickets-page" legacyBehavior passHref>
-                      <NavigationMenuLink
-                        className={navigationMenuTriggerStyle()}
-                      >
-                        Assets
-                      </NavigationMenuLink>
-                    </Link>
+                    <NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
+                      <Link href="/tickets-page">Assets</Link>
+                    </NavigationMenuLink>
                   </NavigationMenuItem>
                   <NavigationMenuItem>
-                    <Link href="/stake-page" legacyBehavior passHref>
-                      <NavigationMenuLink
-                        className={navigationMenuTriggerStyle()}
-                      >
-                        Earn Vault
-                      </NavigationMenuLink>
-                    </Link>
+                    <NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
+                      <Link href="/stake-page">Earn Vault</Link>
+                    </NavigationMenuLink>
                   </NavigationMenuItem>
-                                        <NavigationMenuItem>
-                        <Link href="/liquidity-page" legacyBehavior passHref>
-                          <NavigationMenuLink
-                            className={navigationMenuTriggerStyle()}
-                            onClick={handleLinkClick}
-                          >
-                            Provide Liquidity
+                        <NavigationMenuItem>
+                          <NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
+                            <Link href="/liquidity-page">Provide Liquidity</Link>
                           </NavigationMenuLink>
-                        </Link>
-                      </NavigationMenuItem>
+                        </NavigationMenuItem>
                       <NavigationMenuItem>
-                        <Link href="/dex-page" legacyBehavior passHref>
-                          <NavigationMenuLink
-                            className={navigationMenuTriggerStyle()}
-                          >
-                            Swap
-                          </NavigationMenuLink>
-                        </Link>
+                        <NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
+                          <Link href="/dex-page">Swap</Link>
+                        </NavigationMenuLink>
                       </NavigationMenuItem>
                   <NavigationMenuItem>
-                    <Link href="/voting-page" legacyBehavior passHref>
-                      <NavigationMenuLink
-                        className={navigationMenuTriggerStyle()}
-                      >
-                        Vote
-                      </NavigationMenuLink>
-                    </Link>
+                    <NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
+                      <Link href="/voting-page">Vote</Link>
+                    </NavigationMenuLink>
                   </NavigationMenuItem>
                   <NavigationMenuItem>
-                    <Link href="/leaderboard" legacyBehavior passHref>
-                      <NavigationMenuLink
-                        className={navigationMenuTriggerStyle()}
-                      >
-                        Leaderboard
-                      </NavigationMenuLink>
-                    </Link>
+                    <NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
+                      <Link href="/leaderboard">Leaderboard</Link>
+                    </NavigationMenuLink>
                   </NavigationMenuItem>
                 </>
               )}
@@ -208,7 +154,7 @@ const Navbar = () => {
         </div>
 
         {/* Login button on the far right */}
-        <div className="flex items-center">
+        <div className="flex items-center gap-3">
           <LoginButton />
         </div>
       </div>
