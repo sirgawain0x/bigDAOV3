@@ -1,5 +1,5 @@
 import { NextPage } from "next";
-import { DexComponent } from "@/components/dex/DexComponent";
+import { MultiTokenSwap } from "@/components/dex/MultiTokenSwap";
 
 const DexPage: NextPage = () => {
   return (
@@ -10,11 +10,11 @@ const DexPage: NextPage = () => {
             Swap Tokens
           </h1>
           <p className="text-sm sm:text-base lg:text-lg font-medium text-center">
-            Swap ETH and BIG tokens instantly.
+            Swap ETH, USDC, and cbBTC tokens instantly on Base.
           </p>
         </div>
       </header>
-      <DexComponent />
+      <MultiTokenSwap />
     </div>
   );
 };

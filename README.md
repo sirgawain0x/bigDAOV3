@@ -7,10 +7,18 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 - **Token Management**: View and manage your BigDAO tokens
 - **Staking**: Earn rewards by staking your NFTs
 - **Liquidity Provision**: Provide liquidity to earn trading fees
-- **DEX Trading**: Swap tokens on the decentralized exchange
+- **DEX Trading**: Swap ETH, USDC, and cbBTC tokens on the decentralized exchange
 - **Voting**: Participate in DAO governance
 - **Leaderboard**: Track top performers
 - **Big Coin Purchase**: Buy Big Coin tokens using cbBTC at a fixed rate of 0.0002 cbBTC per token
+
+## Supported Tokens
+
+The application supports the following tokens on the Base chain:
+
+- **ETH**: Native token (0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE)
+- **USDC**: USD Coin (0x833589fcd6edb6e08f4c7c32d4f71b54bda02913)
+- **cbBTC**: Coinbase Wrapped Bitcoin (0xcbb7c0000ab88b473b1f5afd9ef808440eed33bf)
 
 ## Big Coin Token
 

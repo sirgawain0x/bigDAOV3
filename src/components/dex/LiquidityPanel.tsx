@@ -40,7 +40,7 @@ import {
 import { V3_SWAP_ROUTER_ADDRESS } from "@/lib/contracts";
 import { useAccount, useWalletClient } from "wagmi";
 
-const BIG_TOKEN_ADDRESS = "0x7DFECBf3bf20eA5B1fAce4f6936be71be130Bd56";
+const BIG_TOKEN_ADDRESS = "0x3A8df31105Ef1e653EDF8B1B5EE486eB78803266";
 const POOL_FEE = 500; // 0.05%
 const TICK_SPACING = 1;
 
