@@ -11,6 +11,7 @@ import { balanceOf } from "thirdweb/extensions/erc721";
 import { toast } from "sonner";
 import { getCurrencyMetadata } from "thirdweb/extensions/erc20";
 import { Skeleton } from "@/components/ui/skeleton";
+import { getReadableError, isUserRejectedError } from "@/lib/utils";
 
 export const StakeRewards = () => {
   const account = useActiveAccount();
@@ -109,8 +110,12 @@ export const StakeRewards = () => {
               });
             }}
             onError={(error) => {
+              if (isUserRejectedError(error)) {
+                toast("Claim canceled", { id: "claiming-rewards" });
+                return;
+              }
               console.error("Transaction error", error);
-              toast.error("Transaction failed", {
+              toast.error(getReadableError(error, "Transaction failed"), {
                 id: "claiming-rewards"
               });
             }}

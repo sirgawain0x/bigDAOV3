@@ -13,7 +13,7 @@ export default function VotePage() {
           </p>
         </div>
       </header>
-      <div className="flex flex-col items-center justify-center w-full">
+      <div className="flex flex-col items-center justify-center w-full max-w-4xl">
         <Voting />
       </div>
     </div>

@@ -4,7 +4,6 @@ import { client } from "./client";
 import { base } from "thirdweb/chains";
 import { createWallet, inAppWallet } from "thirdweb/wallets";
 import { FACTORY_CONTRACT } from "@/lib/contracts";
-import { NATIVE_TOKEN_ADDRESS } from "thirdweb";
 
 const wallets = [
   inAppWallet(),
