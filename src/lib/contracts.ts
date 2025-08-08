@@ -27,6 +27,7 @@ const ERC20_ABI = [
     name: "balanceOf",
     outputs: [{ name: "balance", type: "uint256" }],
     type: "function",
+    stateMutability: "view",
   },
   {
     constant: true,
@@ -34,6 +35,7 @@ const ERC20_ABI = [
     name: "totalSupply",
     outputs: [{ name: "", type: "uint256" }],
     type: "function",
+    stateMutability: "view",
   },
   {
     constant: true,
@@ -41,6 +43,7 @@ const ERC20_ABI = [
     name: "decimals",
     outputs: [{ name: "", type: "uint8" }],
     type: "function",
+    stateMutability: "view",
   },
 ] as const;
 

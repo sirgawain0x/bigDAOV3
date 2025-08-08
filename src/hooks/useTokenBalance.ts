@@ -26,7 +26,7 @@ export const useTokenBalance = (): UseTokenBalanceResult => {
     try {
       const tokenDecimals = (await readContract({
         contract: REWARD_TOKEN_CONTRACT,
-        method: "function decimals() view returns (uint8)",
+        method: "decimals",
       })) as number;
       setDecimals(tokenDecimals);
     } catch (err) {
@@ -44,7 +44,7 @@ export const useTokenBalance = (): UseTokenBalanceResult => {
     try {
       const value = (await readContract({
         contract: REWARD_TOKEN_CONTRACT,
-        method: "function balanceOf(address account) view returns (uint256)",
+        method: "balanceOf",
         params: [activeAccount.address],
       })) as bigint;
       setBalance(value);
