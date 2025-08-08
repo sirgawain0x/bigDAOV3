@@ -50,7 +50,7 @@ export const LoginButton = () => {
       supportedTokens={{
         8453: [
           {
-            address: "0x7DFECBf3bf20eA5B1fAce4f6936be71be130Bd56",
+            address: "0x3A8df31105Ef1e653EDF8B1B5EE486eB78803266",
             name: "BigCoin",
             symbol: "BIG",
             icon: "https://bafybeigj7octmywpez3gyhxger24o3lgntad5uzrb6wa673lv7p774ih4a.ipfs.w3s.link/BigCoin.png",
@@ -61,6 +61,12 @@ export const LoginButton = () => {
             symbol: "USDC",
             icon: "/icons/usdc-logo.svg",
           },
+          {
+            address: "0xcbb7c0000ab88b473b1f5afd9ef808440eed33bf",
+            name: "Coinbase Wrapped BTC",
+            symbol: "cbBTC",
+            icon: "/icons/cbBTC.png",
+          }
         ],
       }}
       client={client}
