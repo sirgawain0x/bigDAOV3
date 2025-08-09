@@ -82,7 +82,7 @@ export const BuyTokensComponent = () => {
       id: "bigcoin" as TokenType,
       name: "BigCoin",
       symbol: "BIG",
-      description: "Fixed price of 0.0002 cbBTC per token",
+      description: "Fixed pricing (cbBTC)",
       price: "0.0002 cbBTC",
       priceType: "fixed",
       icon: "/icons/BigDAO512.png",

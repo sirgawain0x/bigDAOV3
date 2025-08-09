@@ -13,7 +13,6 @@ import {
   Dialog,
   DialogContent,
   DialogDescription,
-  DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
 import { useBigCoinBuy } from "@/hooks/useBigCoinBuy";
@@ -309,12 +308,10 @@ export const BuyBigCoinComponent = () => {
         {/* Confirmation Dialog */}
         <Dialog open={showConfirmDialog} onOpenChange={setShowConfirmDialog}>
           <DialogContent>
-            <DialogHeader>
-              <DialogTitle>Confirm Purchase</DialogTitle>
-              <DialogDescription>
-                Please review your transaction details before confirming.
-              </DialogDescription>
-            </DialogHeader>
+            <DialogTitle>Confirm Purchase</DialogTitle>
+            <DialogDescription>
+              Please review your transaction details before confirming.
+            </DialogDescription>
             <div className="space-y-4">
               <div className="p-4 bg-muted rounded-lg space-y-2">
                 <div className="flex justify-between">

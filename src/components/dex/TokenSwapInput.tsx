@@ -9,6 +9,13 @@ import {
 } from "@/components/ui/select";
 import Image from "next/image";
 
+// Filter out BIG and REINA tokens for the swap component
+const SWAP_TOKENS: Record<string, TokenConfig> = {
+  ETH: TOKENS.ETH,
+  USDC: TOKENS.USDC,
+  cbBTC: TOKENS.cbBTC,
+};
+
 interface Props {
   selectedToken: TokenConfig;
   onTokenChange: (token: TokenConfig) => void;
@@ -93,7 +100,7 @@ export default function TokenSwapInput({
           <Select
             value={selectedToken.symbol}
             onValueChange={(symbol) => {
-              const token = TOKENS[symbol];
+              const token = SWAP_TOKENS[symbol];
               if (token) {
                 onTokenChange(token);
               }
@@ -104,7 +111,7 @@ export default function TokenSwapInput({
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
-              {Object.values(TOKENS).map((token) => (
+              {Object.values(SWAP_TOKENS).map((token) => (
                 <SelectItem key={token.symbol} value={token.symbol}>
                   <div className="flex items-center space-x-2">
                     {token.logo && (
