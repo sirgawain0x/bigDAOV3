@@ -16,6 +16,7 @@ import {
   Sheet,
   SheetContent,
   SheetHeader,
+  SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { MenuIcon } from "lucide-react";
@@ -59,6 +60,7 @@ const Navbar = () => {
                 <div className="flex flex-col items-center space-y-4">
                   {/* Logo inside the mobile menu */}
                   <SheetHeader onClick={handleLinkClick}>
+                    <SheetTitle className="sr-only">Navigation Menu</SheetTitle>
                     <div className="mb-4">
                       <Link href="/" passHref>
                         <Image

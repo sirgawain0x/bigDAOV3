@@ -6,6 +6,13 @@ import { prepareContractCall, sendTransaction, toWei, Address } from "thirdweb";
 import { Account } from "thirdweb/wallets";
 import { useActiveAccount } from "thirdweb/react";
 import { TokenConfig, TOKENS } from "@/lib/tokenConfig";
+
+// Filter out BIG and REINA tokens for the swap component
+const SWAP_TOKENS: Record<string, TokenConfig> = {
+  ETH: TOKENS.ETH,
+  USDC: TOKENS.USDC,
+  cbBTC: TOKENS.cbBTC,
+};
 import TokenSwapInput from "./TokenSwapInput";
 import { Button } from "@/components/ui/button";
 import { ArrowDown, RefreshCw } from "lucide-react";
@@ -17,8 +24,8 @@ export const MultiTokenSwap = () => {
   const { toast } = useToast();
   
   // Token selection state
-  const [fromToken, setFromToken] = useState<TokenConfig>(TOKENS.ETH);
-  const [toToken, setToToken] = useState<TokenConfig>(TOKENS.USDC);
+  const [fromToken, setFromToken] = useState<TokenConfig>(SWAP_TOKENS.ETH);
+  const [toToken, setToToken] = useState<TokenConfig>(SWAP_TOKENS.USDC);
   
   // Input values
   const [fromValue, setFromValue] = useState<string>("");
