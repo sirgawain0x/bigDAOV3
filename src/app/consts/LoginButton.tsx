@@ -50,12 +50,6 @@ export const LoginButton = () => {
       supportedTokens={{
         8453: [
           {
-            address: "0x3A8df31105Ef1e653EDF8B1B5EE486eB78803266",
-            name: "BigCoin",
-            symbol: "BIG",
-            icon: "https://bafybeigj7octmywpez3gyhxger24o3lgntad5uzrb6wa673lv7p774ih4a.ipfs.w3s.link/BigCoin.png",
-          },
-          {
             address: "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
             name: "USDC",
             symbol: "USDC",
@@ -66,7 +60,19 @@ export const LoginButton = () => {
             name: "Coinbase Wrapped BTC",
             symbol: "cbBTC",
             icon: "/icons/cbBTC.png",
-          }
+          },
+          {
+            address: "0x3A8df31105Ef1e653EDF8B1B5EE486eB78803266",
+            name: "BigCoin",
+            symbol: "BIG",
+            icon: "https://bafybeigj7octmywpez3gyhxger24o3lgntad5uzrb6wa673lv7p774ih4a.ipfs.w3s.link/BigCoin.png",
+          },
+          {
+            address: "0x7d95fd48701c9c5a70ec48806b26c7d78809e894",
+            name: "Reina Coin",
+            symbol: "REINA",
+            icon: "/icons/REINA_final.png",
+          },
         ],
       }}
       client={client}

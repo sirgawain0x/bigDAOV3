@@ -33,7 +33,7 @@ function Claim721AButton() {
   return (
     <div className="mx-auto">
       <TransactionWidget
-        amount={"0.0002"}
+        amount={"0.0025"}
         client={client}
         theme="dark"
         transaction={claimTo({

@@ -37,6 +37,13 @@ export const TOKENS: Record<string, TokenConfig> = {
     decimals: 18,
     logo: "/icons/BigDAO512.png",
   },
+  REINA: {
+    name: "Reina",
+    symbol: "REINA",
+    address: "0x8468f9ee7c2275313979c3042166f325b1da5094",
+    decimals: 18,
+    logo: "/icons/BigDAO512.png", // You can add a specific Reina icon
+  },
 };
 
 export const getTokenByAddress = (address: string): TokenConfig | undefined => {

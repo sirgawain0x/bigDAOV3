@@ -74,9 +74,14 @@ const Navbar = () => {
                     <NavigationMenuList className="flex flex-col space-y-4">
                       <NavigationMenuItem>
                         <NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
-                          <Link href="/buy-big-coin" onClick={handleLinkClick}>Buy Big Coin</Link>
+                          <Link href="/buy-tokens" onClick={handleLinkClick}>Buy Tokens</Link>
                         </NavigationMenuLink>
                       </NavigationMenuItem>
+                      {/* <NavigationMenuItem>
+                        <NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
+                          <Link href="/buy-reina" onClick={handleLinkClick}>Buy Reina</Link>
+                        </NavigationMenuLink>
+                      </NavigationMenuItem> */}
                       <NavigationMenuItem>
                         <NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
                           <Link href="/dex-page" onClick={handleLinkClick}>Quick Swap</Link>
@@ -124,14 +129,19 @@ const Navbar = () => {
                 <>
                   <NavigationMenuItem>
                     <NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
-                      <Link href="/buy-big-coin">Buy Big Coin</Link>
+                      <Link href="/buy-tokens">Buy Tokens</Link>
                     </NavigationMenuLink>
                   </NavigationMenuItem>
-                    <NavigationMenuItem>
-                        <NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
-                          <Link href="/dex-page">Quick Swap</Link>
-                        </NavigationMenuLink>
-                    </NavigationMenuItem>
+                  {/* <NavigationMenuItem>
+                    <NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
+                      <Link href="/buy-reina">Buy Reina</Link>
+                    </NavigationMenuLink>
+                  </NavigationMenuItem> */}
+                  <NavigationMenuItem>
+                    <NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
+                      <Link href="/dex-page">Quick Swap</Link>
+                    </NavigationMenuLink>
+                  </NavigationMenuItem>
                   <NavigationMenuItem>
                     <NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
                       <Link href="/tickets-page">Assets</Link>

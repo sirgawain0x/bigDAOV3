@@ -21,6 +21,7 @@ export const metadata = {
     },
   ],
   icons: [
+    { rel: "icon", url: "/favicon.ico" },
     { rel: "apple-touch-icon", url: "icons/BigDAO512.png" },
     { rel: "icon", url: "icons/BigDAO512.png" },
   ],
