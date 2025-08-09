@@ -155,8 +155,7 @@ export const BuyBigCoinComponent = () => {
                  parseFloat(cbBTCAmount) <= parseFloat(cbBTCBalance);
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4">
-      <div className="w-full max-w-md">
+    <div className="w-full max-w-md mx-auto">
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
@@ -355,6 +354,5 @@ export const BuyBigCoinComponent = () => {
           </DialogContent>
         </Dialog>
       </div>
-    </div>
   );
 };

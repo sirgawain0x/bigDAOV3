@@ -7,6 +7,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import Image from "next/image";
 
 interface Props {
   selectedToken: TokenConfig;
@@ -77,9 +78,11 @@ export default function TokenSwapInput({
         
         <div className="flex items-center space-x-2">
           {selectedToken.logo && (
-            <img
+            <Image
               src={selectedToken.logo}
               alt={selectedToken.symbol}
+              width={24}
+              height={24}
               className="w-6 h-6 rounded-full"
               onError={(e) => {
                 e.currentTarget.style.display = 'none';
@@ -105,9 +108,11 @@ export default function TokenSwapInput({
                 <SelectItem key={token.symbol} value={token.symbol}>
                   <div className="flex items-center space-x-2">
                     {token.logo && (
-                      <img
+                      <Image
                         src={token.logo}
                         alt={token.symbol}
+                        width={16}
+                        height={16}
                         className="w-4 h-4 rounded-full"
                         onError={(e) => {
                           e.currentTarget.style.display = 'none';
